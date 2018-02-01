@@ -1,0 +1,1 @@
+from interpreter_site.wsgi import application
