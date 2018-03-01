@@ -1,0 +1,45 @@
+<c style='color:red'>Actin binding domain (ABD)</c>,Calponin Homology 1 (CH1),0,119,2,4
+<c style='color:red'>Actin binding domain (ABD)</c>,,120,133,4,4
+<c style='color:red'>Actin binding domain (ABD)</c>,Calponin Homology 2 (CH2),134,237,4,4
+Central rod domain,,238,352,8,9
+Central rod domain,Hinge 1,253,327,8,9
+Central rod domain,,328,336,9,10
+Central rod domain,Repeat 1,337,447,10,11
+Central rod domain,Repeat 2,448,556,12,14	
+Central rod domain,Repeat 3,557,667,14,16	
+Central rod domain,Hinge 2,668,717,17,17	
+Central rod domain,Repeat 4,718,828,17,20	
+Central rod domain,Repeat 5,829,934,20,21	
+Central rod domain,Repeat 6,935,1045,22,23	
+Central rod domain,Repeat 7,1046,1154,23,26	
+Central rod domain,Repeat 8,1155,1263,26,27	
+Central rod domain,Repeat 9,1264,1367,28,30	
+Central rod domain,Repeat 10,1368,1463,30,32	
+Central rod domain,Repeat 11 <c style='color:orange'>(Actin binding - ABD2)</c>,1464,1568,32,34
+Central rod domain,Repeat 12 <c style='color:orange'>(Actin binding - ABD2)</c>,1569,1676,34,35
+Central rod domain,Repeat 13 <c style='color:orange'>(Actin binding - ABD2)</c>,1677,1778,36,37
+Central rod domain,Repeat 14 <c style='color:orange'>(Actin binding - ABD2)</c>,1779,1874,38,40
+Central rod domain,Repeat 15 <c style='color:orange'>(Actin binding - ABD2)</c>,1875,1973,40,41
+Central rod domain,Interruption <c style='color:orange'>(Actin binding - ABD2)</c>,1974,1991,42,42
+Central rod domain,Repeat 16 <c style='color:orange'>(Actin binding - ABD2)</c>,1992,2101,42,43
+Central rod domain,Repeat 17 <c style='color:orange'>(Actin binding - ABD2)</c>,2102,2208,44,45
+Central rod domain,Repeat 18,2209,2318,46,48
+Central rod domain,Repeat 19,2319,2423,48,50
+Central rod domain,Hinge 3,2424,2470,50,51
+Central rod domain,Repeat 20,2471,2577,51,53
+Central rod domain,Repeat 21,2578,2686,53,55
+Central rod domain,Repeat 22,2687,2802,55,57
+Central rod domain,Repeat 23,2803,2931,57,59
+Central rod domain,Repeat 24,2932,3040,59,61
+Central rod domain,Hinge 4,3041,3112,61,64
+Cysteine-rich domain,<c style='color:red'>Dystroglycan binding site</c>,3080,3408,63,70
+Cysteine-rich domain,WW domain,3056,3092,62,63
+Cysteine-rich domain,EF-hand 1,3130,3157,65,65
+Cysteine-rich domain,EF-hand 2,3178,3206,65,66
+Cysteine-rich domain,ZZ domain,3307,3354,68,69
+<c style='color:red'>Carboxy-terminal domain</c>,,3409,3443,69,73
+<c style='color:red'>Carboxy-terminal domain</c>,Alpha1-syntrophin binding site,3444,3494,73,74
+<c style='color:red'>Carboxy-terminal domain</c>,Beta1-syntrophin binding site,3495,3535,74,75
+<c style='color:red'>Carboxy-terminal domain</c>,,3536,3557,75,75
+<c style='color:red'>Carboxy-terminal domain</c>,(Leu)6-heptad repeat,3558,3593,75,75
+<c style='color:red'>Carboxy-terminal domain</c>,,3594,3685,75,79

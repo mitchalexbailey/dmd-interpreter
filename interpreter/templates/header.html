@@ -1,0 +1,74 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<head>
+  <title>DMD Explorer - Dev</title>
+  <link rel='stylesheet' type = 'text/css' href='{% static 'css/bootstrap.css' %}'/>
+  <link rel='stylesheet' type = 'text/css' href='{% static 'css/custom.css' %}'/>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
+
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/exons.js' %}"></script>
+</head>
+
+<div class='navbar navbar-default navbar-fixed-top'>
+  <div class='container'>    
+    <div class='navbar-header'>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle Navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{% url 'interpreter:index' %}"><span><img class="hidden-xs" style="height:140%" src="{% static 'images/vertical_clip.png' %}" alt="DNA Logo"/></span><h2 class="navbar-text hidden-xs"><b>DOVE</b><span class="hidden-sm">:<i>DMD</i> Open-access Variant Explorer</span></h2><p class="navbar-text visible-xs">&nbsp;&nbsp;&nbsp;<b>DOVE</b>: <i>DMD</i> Open-access Variant Explorer</p></a>
+    </div>
+
+    <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a href="{% url 'interpreter:index' %}"><h4 style="color:black">Home</h4></a>
+          </li> 
+          <!-- <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><h4 style="color:black">Resources</h4></a>
+            <ul class="dropdown-menu">
+              <li role="separator" class="divider"></li>
+              <li class="dropdown-header">The <i>DMD</i> Gene</li>
+              <li class="dropdown-item"><a target="_blank" href="/">Background Information</a></li>
+              <li class="dropdown-item"><a target="_blank" href="/">"The Reading-frame Rule"</a></li>
+              <li role="separator" class="divider"></li>
+              <li class="dropdown-header">Genetic Testing for Duchenne Muscular Dystrophy</li>
+              <li class="dropdown-item"><a target="_blank" href="/">Multiplex Ligation-dependent Probe Amplification (MLPA)</a></li>
+              <li class="dropdown-item"><a target="_blank" href="/">Array Comparative Genomic Hybridization (aCGH)</a></li>
+              <li class="dropdown-item"><a target="_blank" href="/">Next-generation Sequencing (NGS)</a></li>
+              <li class="dropdown-item"><a target="_blank" href="/">Multiplex Polymerase Chain Reaction (mPCR)</a></li>
+              <li class="dropdown-item"><a target="_blank" href="/">Sanger Sequencing</a></li>
+              <li role="separator" class="divider"></li>
+              <li class="dropdown-header">External Resources</li>
+              <li class="dropdown-item"><a target="_blank" href="http://www.parentprojectmd.org/site/PageServer?pagename=nws_index">Parent Project Muscular Dystrophy</a></li> 
+              <li class="dropdown-item"><a target="_blank" href="https://www.mda.org/">Musculary Dystrophy Association</a></li>
+              <li class="dropdown-item"><a target="_blank" href="http://www.dmd.nl/">Leiden Muscular Dystrophy pages</a></li>
+              <li role="separator" class="divider"></li>
+            </ul>
+          </li>  -->
+          <li>
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#"><h4 style="color:black">Quick input</h4></a>
+            <ul class="dropdown-menu" style="text-align:center;">
+              <li role="separator" class="divider"></li>
+              <li class="dropdown-header">Enter a variant:
+              </li>  
+              <li>
+                <form action="{% url 'interpreter:results' %}" method = "post">
+                {% csrf_token %}
+                <input class="userAnswer" type = "text" id='userAnswer' name = "mutation" style='height:70px;width:100%;font-size:24pt;'/>
+              </li>
+              <li style='margin-top:20px;margin-bottom:20px'>
+                <button type = "submit" style = 'height:70px;width:150px;font-size:24px;align:center' class = 'btn btn-lg btn-primary'>Interpret</button><br>
+                </form>
+              </li>
+              <li role="separator" class="divider"></li>
+            </ul>
+          </li>
+        </ul>
+     </div>
+  </div>
+</div>

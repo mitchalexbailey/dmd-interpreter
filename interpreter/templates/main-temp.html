@@ -1,0 +1,395 @@
+{% load staticfiles %}
+{% include 'header.html' %}
+
+<div class='container'><br>
+	<h1 style='text-align:center'>{{ user_inp }}</h1>
+</div>
+
+<div class='container'>
+	<div id='content'>
+		<ul class='nav nav-tabs'>
+			<li class="active"><a data-toggle='tab' href='#overview'><p>Overview</p></a></li>
+			<li><a data-toggle="tab" href="#insilico"><p><i>In Silico</i> Predictions</p></a></li>
+			<li><a data-toggle="tab" href="#therapies"><p>Therapies</p></a></li>
+			<li><a data-toggle="tab" href="#leiden"><p>Leiden Database</p></a></li>
+			<li><a data-toggle="tab" href="#sequences"><p>Sequences</p></a></li>
+			<li><a data-toggle="tab" href="#myvar"><p>myVariant.info</p></a></li>
+			<li><a data-toggle="tab" href="#litsearch"><p>References</p></a></li>
+		</ul>
+
+		<div class = 'tab-content'>
+			<div id = 'overview' class='tab-pane fade in active'>
+				<div class='container'>
+					<div class='col-xs-12'>
+						<h1 style='font-size:30px'>Summary</h1>            
+						<table class="table table-bordered">
+							<tr>
+								<td>HGVS (NM_004006.2)</td>
+								<td><b id="displayedHgvs">{{ hgvs }}</b></td>
+							</tr>
+							<tr>
+								<td>HGVS (GRCh38)</td>
+								<td><b>{{ ghgvs }}</b></td>
+							</tr>
+							<tr>
+								<td>Mutation type</td>
+								<td><b>{{ mutype }}</b></td>
+							</tr>
+							<tr>
+								<td>Exon number(s)</td>
+								<td><b>
+								{% if exons|length > 1 %}
+								{{ exons.0 }}-{{ exons.1 }}
+								{% else %}
+								{{ exons.0 }}
+								{% endif %}
+								</b></td>
+							</tr>
+							<tr>
+								<td>Domain(s)</td>
+								<td><b>{{ domains|safe }}</b></td>
+							</tr>
+							<tr>
+								<td>Length of mutated sequence</td>
+								<td><b>{{ length_mutation }}</b> nucleotide(s)</td>
+							</tr>
+							<tr>
+								<td>Predicted consequence</td>
+								<td><b>{{ consequence|safe }}</b>{{ consequence_message|safe }}</td>
+							</tr>
+							<tr>
+								<td>Therapies Available or In Development</td>
+								<td>{{ therapy|safe }}</td>
+							</tr>
+							<tr>
+								<td><i>In Silico</i> Predictions<br></td>
+								<td>{% if splice_message|length > 1 %}
+									{{ splice_message|safe }}<br>
+									{% endif %}
+									{% if motif_message|length > 1 %}
+									{{ motif_message|safe }}<br>
+									{% endif %}
+									{% if insilico_message|length > 1 %}
+									{{ insilico_message|safe }}<br>
+									{% endif %}
+								</td>
+							</tr>
+							<tr>
+								<td>ClinVar</td>
+								<td>{{ cv|safe }}<br></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class='col-xs-12'>
+					<a id="togglerloc" data-toggle="collapse" class="collapse in" data-target="#loc" style='color:black'>
+					<i class="icon-folder-open"></i>
+					<i class="icon-folder-close"></i>
+					<h3>Dystrophin Diagram<span class="caret"></span></h3>
+					</a>
+					<div id='loc' class='collapse'>
+						<img src='{% static 'images/domains4.gif' %}' class='img-responsive' style='width:100%;' alt="Dystrophin/DMD Map"/>
+					</div>
+					<br><br>
+				</div>
+			</div>  
+
+
+			<div id = 'insilico' class='tab-pane'>
+{% if large_deletion == True %}
+					<div class='row'>
+						<div class='jumbotron' style="margin: 50px 20px 20px 20px">
+							<h2 style="text-align:center;">Splice site and spice motif predictions are not made for large mutations.</h2>
+						</div>
+					</div>
+{% else %}
+				<div class='container'>
+					<div class='row'>
+						<div class='col-xs-6'>
+							<h1 style='color:black;font-size:30px;text-align:center'>Functional Predictions from dbNSFPv3.0</h1>  
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th colspan=2>Negative functional prediction vote (by algorithm): {{ nsfp_score|safe }}</th>
+									</tr>
+								</thead>
+								<tr>
+									<td >SIFT</td>
+									<td>{{ sift|safe }}</td>
+								</tr>
+								<tr>
+									<td>PolyPhen</td>
+									<td>{{ polyphen|safe }}</td>
+								</tr>
+								<tr>
+									<td>LRT</td>
+									<td>{{ lrt|safe }}</td>
+								</tr>
+								<tr>
+									<td>MutationTaster</td>
+									<td>{{ mutationtaster|safe }}</td>
+								</tr>
+								<tr>
+									<td>MutationAssessor</td>
+									<td>{{ mutationassessor|safe }}</td>
+								</tr>
+								<tr>
+									<td>FATHMM</td>
+									<td>{{ fathmm|safe }}</td>
+								</tr>
+								<tr>
+									<td>PROVEAN</td>
+									<td>{{ provean|safe }}</td>
+								</tr>
+								<tr>
+									<td>MetaSVM</td>
+									<td>{{ metasvm|safe }}</td>
+								</tr>
+							</table>
+						</div>
+						<div class='col-xs-6'>
+							<h1 style='color:black;font-size:30px;text-align:center'>Splicing Motifs</h1>      
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>Motif</th>
+										<th>Scoring used</th>
+										<th>Type</th>
+										<th>Relative change</th>
+									</tr>
+								</thead>
+								<tr>
+									<td rowspan = 2> Exon Splice Enhancer (ESE) </td>
+									<td> Rescue-ESE </td>
+									<td> <i>NA</i> </td>
+									<td>{{ rescueese|safe }}</td>
+								</tr>
+								<tr>
+									<td> ESEFinder </td>
+									{{ esefinder|safe }}
+								</tr>
+								<tr>
+									<td> Exon Splice Silencer (ESS) </td>
+									<td> Fas-ESS Hexamers </td>
+									<td> <i>NA</i> </td>
+									<td>{{ ess_message|safe }}</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class='container'>
+					<div class='row'>
+						<div class='col-xs-12'>  
+							<h1 style='color:black;font-size:30px'>Splice sites</h1>
+							A MaxEnt score of >3 is considered significant.<br>         
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>Site type</th>
+										<th>Reference MaxEnt score</th>
+										<th>Mutant MaxEnt score</th>
+										<th>Percent change</th>
+									</tr>
+									{% if splice_message2|length > 1 %}
+									<tr>
+										<th colspan = 4>{{ splice_message2|safe }}</th>
+									</tr>
+									{% endif %}
+								</thead>
+	{% for item in splice_result %}
+									<tr>
+										{{ item|safe }}
+									</tr>
+	{% endfor %}
+							</table>
+						</div>
+					</div>
+				</div>
+{% endif %}
+			</div>
+			<div id = 'therapies' class = 'tab-pane'>
+				<div class = 'row'>
+					<div class='col-xs-6'>
+						<h1 style='color:black;font-size:30px'>Exon Skipping Therapy</h1>        
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>Theoretical exon skips</th>
+								</tr>
+							</thead>
+							{% for item in posskip %}
+							<tr>
+								<td>{{ item|safe }}</td>
+							</tr>
+							{% endfor %}
+					    	<tr>
+					    		<td><a href='http://scholar.google.com/scholar?q=%22exon+skipping%22+AND+%22antisense+oligonucleotide%22&btnG=&hl=en&as_sdt=0%2C5' target="_blank">Read more about exon skipping</a></td>
+					    	</tr>
+						</table>
+					</div>
+
+					<div class='col-xs-6'>
+						<h1 style='color:black;font-size:30px'>Readthrough Therapy</h1>        
+						<table class="table table-bordered">
+							<thead>
+							    <tr>
+									<th>Theoretical eligibility</th>
+								</tr>
+							</thead>
+								<tr>
+									<td>{{ readthrough_elig|safe }}</td>
+								</tr>
+								<tr>
+									<td><a href='http://scholar.google.com/scholar?q=%22readthrough+therapy%22&btnG=&hl=en&as_sdt=0%2C5' target="_blank">Read more about readthrough therapy</a></td>
+								</tr>
+						</table>
+					</div>
+				</div>
+				<div class = 'container row'>
+					Please also visit <a href="https://clinicaltrials.gov/ct2/results?term=duchenne+muscular+dystrophy&Search=Search" target="_blank">Clinicaltrials.gov</a> or your national/local clinical trial registry for the most up-to-date therapeutic possibilities.
+				</div>
+			</div>
+
+			<div id = 'sequences' class = 'tab-pane'>
+				<div class = 'row'>
+					<div class='col-xs-6' style='word-wrap: break-word;'>
+						<a id="togglermut" data-toggle="collapse" class="collapse in" data-target="#mut">
+						<i class="icon-folder-open"></i>
+						<i class="icon-folder-close"></i>
+						<h2>Reference Sequence (NM_004006.2)</h2>Click for full sequence</a><em class='gray'>{{ refcdna_print_preview|safe }}</em>
+						<div id='mut' class='collapse'>
+							<h3>Full Sequence:</h3><p>(double-click to copy/paste)</p>{{ refcdna_for_print|safe }}
+						</div>
+					</div>
+
+					<div class='col-xs-6' style='word-wrap: break-word;'>
+						<a id="togglerref" data-toggle="collapse" class="collapse in" data-target="#ref">
+						<i class="icon-folder-open"></i>
+						<i class="icon-folder-close"></i>
+						<h2>Mutated Sequence</h2>Click for full sequence</a><em class='gray'>{{ cdna_print_preview|safe }}</em>
+						<div id='ref' class='collapse'>
+							<h3>Full Sequence:</h3><p>(double-click to copy/paste)</p>{{ cdna_for_print|safe }}
+						</div>
+					</div>
+				</div>
+			</div>
+
+				
+			<div id = 'leiden' class = 'tab-pane'>
+				<div class = 'container'>
+					<div class='well' style='text-align:center;'>
+						To view at LOVD, click <a href= {{ leiden_link }} target="_blank">here</a>.
+					</div>
+					{{ leiden_frame|safe }}
+				</div>
+			</div>
+
+			<div id = 'litsearch' class = 'tab-pane'>
+				<div class='container'>
+					<br>
+					
+					<div class='row' style='text-align:center'>
+						<p style='color:purple;font-size:18px'>*This is not an exhaustive list of work done on exon skipping in the <i>DMD</i> gene.*<br> If a paper/group has been missed, please <a href='mailto:mitchell.bailey@bmrn.com?Subject=DMD%20Mutation%20Explorer'>Contact Us</a>.</p> 
+					 </div>
+
+					 <div class='row'>
+						<div class='col-xs-3'>
+							<h3>Exon Skipping Therapy</h3>
+							<ul>
+								<div style = 'font-size:10px'>
+									<li>Aartsma-Rus A. Antisense-mediated modulation of splicing: therapeutic implications for Duchenne muscular dystrophy. RNA Biol. 2010 Jul-Aug;7(4):453-61.Epub 2010 Jul 1. Review. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/20523110" target="_blank">20523110</a>.</li><br>
+									<li>Aartsma-Rus, A., Fokkema, I., Verschuuren, J., Ginjaar, I., van Deutekom, J., van Ommen, G. J., & den Dunnen, J. T. (2009). Theoretic applicability of antisense-mediated exon skipping for Duchenne muscular dystrophy mutations. Human mutation, 30(3), 293-299. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/19156838" target="_blank">19156838</a>.</li><br>
+									<li>Arechavala-Gomeza V, Graham IR, Popplewell LJ, Adams AM, Aartsma-Rus A, Kinali M, Morgan JE, van Deutekom JC, Wilton SD, Dickson G, Muntoni F. Comparative analysis of antisense oligonucleotide sequences for targeted skipping of exon 51 during dystrophin pre-mRNA splicing in human muscle. Hum Gene Ther. 2007 Sep;18(9):798-810. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/17767400" target="_blank">17767400</a>.</li><br> 
+									<li>Greer KL, Lochmller H, Flanigan K, Fletcher S, Wilton SD. Targeted exon skipping to correct exon duplications in the dystrophin gene. Mol Ther Nucleic Acids. 2014 Mar 18;3:e155. doi: 10.1038/mtna.2014.8. PubMed PMID: 24643206; PubMed Central PMCID: <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3982197/" target="_blank">PMC3982197</a>.</li><br>
+									<li>Matsuo M, Takeshima Y, Nishio H. Contributions of Japanese patients to development of antisense therapy for DMD. Brain Dev. 2015 Jun 18. pii:S0387-7604(15)00108-4. doi: 10.1016/j.braindev.2015.05.014. [Epub ahead of print] Review. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/26094594" target="_blank">26094594</a>.</li><br>
+									<li>Van Deutekom JC, Bremmer-Bout M, Janson AA, Ginjaar IB, Baas F, den Dunnen JT, van Ommen GJ. Antisense-induced exon skipping restores dystrophin expression in DMD patient derived muscle cells. Hum Mol Genet. 2001 Jul 15;10(15):1547-54. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/11468272" target="_blank">11468272</a>.</li><br>
+									<li>Wilton SD, Fall AM, Harding PL, McClorey G, Coleman C, Fletcher S. Antisense oligonucleotide-induced exon skipping across the human dystrophin gene transcript. Mol Ther. 2007 Jul;15(7):1288-96. Epub 2007 Feb 6. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/17285139" target="_blank">17285139</a>.</li><br>						
+									<li>Wilton SD, Lloyd F, Carville K, Fletcher S, Honeyman K, Agrawal S, Kole R. Specific removal of the nonsense mutation from the mdx dystrophin mRNA using antisense oligonucleotides. Neuromuscul Disord. 1999 Jul;9(5):330-8. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/10407856" target="_blank">10407856</a>.</li><br>
+								</div>
+							</ul>
+						</div>
+
+						<div class='col-xs-3'>
+							<h3>Read-through Therapy</h3>
+							<ul>
+								<div style = 'font-size:10px'>
+									<li>Aurino, S., & Nigro, V. (2006). Readthrough strategies for stop codons in Duchenne muscular dystrophy. Acta myol, 25(1), 5-12. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/17039975" target="_blank">17039975</a>.</li><br>
+									<li>Cossu, G., & Sampaolesi, M. (2007). New therapies for Duchenne muscular dystrophy: challenges, prospects and clinical trials. Trends in molecular medicine, 13(12), 520-526. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/17983835" target="_blank">17983835</a>.</li><br>
+									<li>Finkel, R. S. (2010). Read-through strategies for suppression of nonsense mutations in Duchenne/Becker muscular dystrophy: aminoglycosides and ataluren (PTC124). Journal of child neurology. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/20519671" target="_blank">20519671</a>.</li><br>
+									<li>Hoffman, E. P., Bronson, A., Levin, A. A., Takeda, S. I., Yokota, T., Baudy, A. R., & Connor, E. M. (2011). Restoring dystrophin expression in duchenne muscular dystrophy muscle: progress in exon skipping and stop codon read through. The American journal of pathology, 179(1), 12-22. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/21703390" target="_blank">21703390</a>.</li><br>
+									<li>Kayali, R., Ku, J. M., Khitrov, G., Jung, M. E., Prikhodko, O., & Bertoni, C. (2012). Read-through compound 13 restores dystrophin expression and improves muscle function in the mdx mouse model for Duchenne muscular dystrophy. Human molecular genetics, 21(18), 4007-4020. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/22692682" target="_blank">22692682</a>.</li><br>
+									<li>Malik, V., Rodino-Klapac, L. R., Viollet, L., Wall, C., King, W., Al-Dahhak, R., ... & Mendell, J. R. (2010). Gentamicin-induced readthrough of stop codons in Duchenne muscular dystrophy. Annals of neurology, 67(6), 771-780. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/20517938" target="_blank">20517938</a>.</li><br>
+									<li>Malik, V., Rodino-Klapac, L. R., Viollet, L., & Mendell, J. R. (2010). Aminoglycoside-induced mutation suppression (stop codon readthrough) as a therapeutic strategy for Duchenne muscular dystrophy. Therapeutic advances in neurological disorders, 3(6), 379-389. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/21179598" target="_blank">21179598</a>.</li><br>
+									<li>Zingman, L. V., Park, S., Olson, T. M., Alekseev, A. E., & Terzic, A. (2007). Aminoglycoside-induced translational read-through in disease: overcoming nonsense mutations by pharmacogenetic therapy. Clinical Pharmacology & Therapeutics, 81(1), 99-103. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/17186006" target="_blank">17186006</a>.</li><br>
+								</div>
+							</ul>
+						</div>
+
+						<div class='col-xs-3'>
+							<h3>Splice Sites & Motifs</h3>
+							<ul>
+								<div style = 'font-size:10px'>
+									<li>Cartegni L., Wang J., Zhu Z., Zhang M. Q., Krainer A. R.; 2003. ESEfinder: a web resource to identify exonic splicing enhancers. Nucleic Acid Research, 2003, 31(13):3568-3571. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/12824367" target="_blank">12824367</a>.</li><br>
+									<li>Fairbrother WG, Yeh RF, Sharp PA, Burge CB. Predictive identification of exonic splicing enhancers in human genes. Science. 2002 Aug 9;297(5583):1007-13. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/12114529" target="_blank">12114529</a>.</li><br>
+									<li>Gene Yeo and Christopher B. Burge. 2003. Maximum entropy modeling of short sequence motifs with applications to RNA splicing signals. In Proceedings of the seventh annual international conference on Research in computational molecular biology (RECOMB '03), Martin Vingron, Sorin Istrail, Pavel Pevzner, and Michael Waterman (Eds.). ACM, New York, NY, USA, 322-331. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/15285897" target="_blank">15285897</a>.</li><br>
+									<li>Smith, P. J., Zhang, C., Wang, J. Chew, S. L., Zhang, M. Q. and Krainer, A. R. 2006. An increased specificity score matrix for the prediction of SF2/ASF-specific exonic splicing enhancers. Hum. Mol. Genet. 15(16):2490-2508. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/16825284" target="_blank">16825284</a>.</li><br>
+									<li>Wang Z, Rolish ME, Yeo G, Tung V, Mawson M, Burge CB. Systematic identification and analysis of exonic splicing silencers. Cell. 2004 Dec 17;119(6):831-45. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/15607979" target="_blank">15607979</a>.</li><br>
+									
+								</div>
+							</ul>
+						</div>
+
+						<div class='col-xs-3'>
+							<h3>Data & Sequences</h3>
+							<ul>
+								<div style = 'font-size:10px'>
+									<li>Aartsma-Rus et al. (2006). Entries in the Leiden Duchenne muscular dystrophy mutation database: an overview of mutation types and paradoxical cases that confirm the reading-frame rule. Muscle Nerve. 34:135-144. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/16770791" target="_blank">16770791</a>.</li><br>
+									<li>Landrum MJ, Lee JM, Riley GR, Jang W, Rubinstein WS, Church DM, Maglott DR. ClinVar: public archive of relationships among sequence variation and human phenotype. Nucleic Acids Res. 2014 Jan 1;42(1):D980-5. doi: 10.1093/nar/gkt1113. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/24234437" target="_blank">24234437</a>.</li><br>
+									<li>Liu X, Wu C, Li C and Boerwinkle E. 2015. dbNSFP v3.0: A One-Stop Database of Functional Predictions and Annotations for Human Non-synonymous and Splice Site SNVs. Human Mutation. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/26555599" target="_blank">26555599</a>.</li><br>
+									<li>White SJ, den Dunnen JT (2006). Copy number variation in the genome; the human DMD gene as an example. Cytogenet.Genome Res. 115: 240-246. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/17124406" target="_blank">17124406</a>.</li><br>
+									<li>Homo sapiens dystrophin (DMD), transcript variant Dp427m, mRNA. RefSeq Accession: <a href="http://www.ncbi.nlm.nih.gov/nuccore/238018044" target="_blank">NM_004006.2</a>.</li><br>
+									<li>Homo sapiens dystrophin (DMD), RefSeqGene (LRG_199) on chromosome X. RefSeq AFccession: <a href="http://www.ncbi.nlm.nih.gov/nuccore/256355061" target="_blank">NG_012232.1</a>.</li><br>
+								</div>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id = 'myvar' class = 'tab-pane'>
+				<div class='container'>
+					<div class='row'>
+						<div class='col-xs-2'>&nbsp;</div>
+						<div class='col-xs-8'>
+							<div class='btn btn-success' style='text-align:center; margin: 2%; position: relative; width: 100%; white-space: normal;' id="dlMVD" {% if mv_disable %} disabled {% endif %}><h1 >Click to download raw myVariant.info results (JSON)</h1></div>
+							<br /> <br />
+						</div>
+						<div class='col-xs-2'>&nbsp;</div>
+					</div>
+					<div class='row'>
+						<div class='col-xs-12' style='text-align:center;'>
+							<div class='well'>
+								{{ mv_format }}
+							</div>
+						</div>
+					</div>
+						<div id="mvData" style="display: none">
+							{{ mv_results }}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+{% if not mv_disable %} $("#dlMVD").click(function(){
+	$('<a />').attr({
+              download: 'myVariantInfo_DOVE_' + $("#displayedHgvs")[0].innerText + '.json', 
+              href: "data:text/html," + $('#mvData').html() 
+       })[0].click()
+}); {% endif %}
+
+</script>
+
+</body>

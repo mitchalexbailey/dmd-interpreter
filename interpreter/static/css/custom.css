@@ -1,0 +1,20 @@
+h1,h2,h3,p,a,b,i,label {
+	font-family: Roboto;
+
+}
+
+.dropdown-header {
+	font-size: 30px;
+}
+
+.dropdown-item {
+	font-size: 24px;
+}
+
+.dropdown-menu {
+	padding: 20px;
+}
+
+.divider {
+	padding: 5px;
+}

@@ -1,0 +1,187 @@
+{% load staticfiles %}
+{% include 'header.html' %}
+
+<div class='container'>
+
+
+
+{% if success == False %}
+<h3> 
+  <br>
+  <div class = 'well' style='text-align:center'>
+    <c style='color:red'>No variant type, or position detected in your input. Please retry.<br>If problem persists, please refer to input examples or <a href='mailto:mitchell.bailey@bmrn.com?Subject=DMD%20Mutation%20Explorer'> contact us </a>with a description of the issue.</c><br>
+  </div>
+</h3>
+{% endif %}
+{% if triage == True %}
+<div class='jumbotron' style='background-color: rgba(178,34,34,0.4);margin: 50px 20px 20px 20px;border: 4px solid red;'>
+{% include 'triage.html' %}
+</div>
+{% endif %}
+
+<h3> 
+	<br>Input specific <i>DMD</i> gene variants to receive analysis of variant type, length, reading frame alterations, potential effects on splicing, and exon skipping eligibility.
+</h3>
+
+<br>
+<form action="{% url 'interpreter:results' %}" method = "post">
+{% csrf_token %}	
+
+<style>
+  table.equalDivide tr td {width:25%;}
+  .exline {width:100%;}
+  .ex {float:left;padding:0px;width:7.6%;height:40px;}
+  div.ex>img {
+     width:100%;
+      height:70%;
+  }
+</style>
+
+<div class='well'>
+  <a id="togglertext" data-toggle="collapse" class="collapse in" data-target="#inp">
+    <i class="icon-folder-open"></i>
+    <i class="icon-folder-close"></i>
+    <h3><span class="glyphicon glyphicon-text-size"></span>&emsp;Text input</h3>
+  </a>
+  
+  <div id="inp" class="collapse">
+    <h3>Input should include a reference to: </h3>
+    <ol>
+      <li>The location of the variant (nucleotide positions should be relative to cDNA (NM_004006.2).</li>
+      <li>The type of variant.</li>
+      <!-- <i>If you are uncertain how to input the variant, enter the numbers in ascending order (separated by a space), then any additional information (ex. A>T, del, dup, delins, exon)</i> -->
+    </ol>
+    
+    <div class='container-fluid' style='text-align: center;'>
+      <a id="toggler" data-toggle="collapse" class="active" data-target="#examples">
+        <i class="icon-folder-open"></i>
+        <i class="icon-folder-close"></i>
+        <span class="glyphicon glyphicon-info-sign"></span>&nbsp;&nbsp;Click for examples of acceptable input
+      </a>
+      <div id='examples' class='collapse'>
+        <div class='row'>
+          <input type="button" class="btn-primary" name="userAnswerChoice" value="c.183delA" id='radio1'>
+          <input type="button" class="btn-primary" name="userAnswerChoice" value="Deletion of exons 52-63" id='radio2'>
+          <input type="button" class="btn-primary" name="userAnswerChoice" value="dup ex 54" id='radio3'>
+          <input type="button" class="btn-primary" name="userAnswerChoice" value="c.70T>C" id='radio4'>
+          <input type="button" class="btn-primary" name="userAnswerChoice" value="c.187-?_960+?del" id='radio5'>
+          <input type="button" class="btn-primary" name="userAnswerChoice" value="c.10453_10454delinsTA" id='radio6'>
+        </div>
+      </div>
+    </div>
+
+<br>
+    <input class='userAnswer' type = "text" id='userAnswer' name = "mutation" style='height:70px;width:100%;font-size:24pt;'/> 
+  </div>
+</div>
+
+
+<div class='well'>
+  <a id="togglervisual" data-toggle='collapse' class='active' data-target='#visual'>
+    <i class="icon-folder-open"></i>
+    <i class="icon-folder-close"></i>
+    <h3><span class="glyphicon glyphicon-screenshot"></span>&emsp;Exon deletion selector</h3>
+  </a>
+  <div id='visual' class='collapse'>
+    <div class='row'>
+      <div class="col-sm-12">
+        <div class='exline' style='margin-top:2%'>
+          <div class='ex'><img src="{% static 'images/1.png'%}" id='1' value='1'></div>
+          <div class='ex'><img src="{% static 'images/2.png'%}" id='2'></div>
+          <div class='ex'><img src="{% static 'images/3.png'%}" id='3'></div>
+          <div class='ex'><img src="{% static 'images/4.png'%}" id='4'></div>
+          <div class='ex'><img src="{% static 'images/5.png'%}" id='5'></div>
+          <div class='ex'><img src="{% static 'images/6.png'%}" id='6'></div>
+          <div class='ex'><img src="{% static 'images/7.png'%}" id='7'></div>
+          <div class='ex'><img src="{% static 'images/8.png'%}" id='8'></div>
+          <div class='ex'><img src="{% static 'images/9.png'%}" id='9'></div>
+          <div class='ex'><img src="{% static 'images/10.png'%}" id='10'></div>
+          <div class='ex'><img src="{% static 'images/11.png'%}" id='11'></div>
+          <div class='ex'><img src="{% static 'images/12.png'%}" id='12'></div>
+          <div class='ex'><img src="{% static 'images/13.png'%}" id='13'></div>
+          <div class='ex'><img src="{% static 'images/14.png'%}" id='14'></div>
+          <div class='ex'><img src="{% static 'images/15.png'%}" id='15'></div>
+          <div class='ex'><img src="{% static 'images/16.png'%}" id='16'></div>
+          <div class='ex'><img src="{% static 'images/17.png'%}" id='17'></div>
+          <div class='ex'><img src="{% static 'images/18.png'%}" id='18'></div>
+          <div class='ex' id='2'><img src="{% static 'images/19.png'%}" id='19'></div>
+          <div class='ex' id='2'><img src="{% static 'images/20.png'%}" id='20'></div>
+          <div class='ex' id='2'><img src="{% static 'images/21.png'%}" id='21'></div>
+          <div class='ex' id='2'><img src="{% static 'images/22.png'%}" id='22'></div>
+          <div class='ex' id='2'><img src="{% static 'images/23.png'%}" id='23'></div>
+          <div class='ex' id='2'><img src="{% static 'images/24.png'%}" id='24'></div>
+          <div class='ex' id='2'><img src="{% static 'images/25.png'%}" id='25'></div>
+          <div class='ex' id='2'><img src="{% static 'images/26.png'%}" id='26'></div>
+          <div class='ex' id='2'><img src="{% static 'images/27.png'%}" id='27'></div>
+          <div class='ex' id='2'><img src="{% static 'images/28.png'%}" id='28'></div>
+          <div class='ex' id='2'><img src="{% static 'images/29.png'%}" id='29'></div>
+          <div class='ex' id='2'><img src="{% static 'images/30.png'%}" id='30'></div>
+          <div class='ex' id='2'><img src="{% static 'images/31.png'%}" id='31'></div>
+          <div class='ex' id='2'><img src="{% static 'images/32.png'%}" id='32'></div>
+          <div class='ex' id='2'><img src="{% static 'images/33.png'%}" id='33'></div>
+          <div class='ex' id='2'><img src="{% static 'images/34.png'%}" id='34'></div>
+          <div class='ex' id='2'><img src="{% static 'images/35.png'%}" id='35'></div>
+          <div class='ex' id='2'><img src="{% static 'images/36.png'%}" id='36'></div>
+          <div class='ex' id='2'><img src="{% static 'images/37.png'%}" id='37'></div>
+          <div class='ex' id='2'><img src="{% static 'images/38.png'%}" id='38'></div>
+          <div class='ex' id='2'><img src="{% static 'images/39.png'%}" id='39'></div>
+          <div class='ex' id='2'><img src="{% static 'images/40.png'%}" id='40'></div>
+          <div class='ex' id='2'><img src="{% static 'images/41.png'%}" id='41'></div>
+          <div class='ex' id='2'><img src="{% static 'images/42.png'%}" id='42'></div>
+          <div class='ex'><img src="{% static 'images/43.png'%}" id='43'></div>
+          <div class='ex'><img src="{% static 'images/44.png'%}" id='44'></div>
+          <div class='ex'><img src="{% static 'images/45.png'%}" id='45'></div>
+          <div class='ex'><img src="{% static 'images/46.png'%}" id='46'></div>
+          <div class='ex'><img src="{% static 'images/47.png'%}" id='47'></div>
+          <div class='ex'><img src="{% static 'images/48.png'%}" id='48'></div>
+          <div class='ex'><img src="{% static 'images/49.png'%}" id='49'></div>
+          <div class='ex'><img src="{% static 'images/50.png'%}" id='50'></div>
+          <div class='ex'><img src="{% static 'images/51.png'%}" id='51'></div>
+          <div class='ex'><img src="{% static 'images/52.png'%}" id='52'></div>
+          <div class='ex'><img src="{% static 'images/53.png'%}" id='53'></div>
+          <div class='ex'><img src="{% static 'images/54.png'%}" id='54'></div>
+          <div class='ex'><img src="{% static 'images/55.png'%}" id='55'></div>
+          <div class='ex'><img src="{% static 'images/56.png'%}" id='56'></div>
+          <div class='ex'><img src="{% static 'images/57.png'%}" id='57'></div>
+          <div class='ex'><img src="{% static 'images/58.png'%}" id='58'></div>
+          <div class='ex'><img src="{% static 'images/59.png'%}" id='59'></div>
+          <div class='ex'><img src="{% static 'images/60.png'%}" id='60'></div>
+          <div class='ex'><img src="{% static 'images/61.png'%}" id='61'></div>
+          <div class='ex'><img src="{% static 'images/62.png'%}" id='62'></div>
+          <div class='ex'><img src="{% static 'images/63.png'%}" id='63'></div>
+          <div class='ex'><img src="{% static 'images/64.png'%}" id='64'></div>
+          <div class='ex'><img src="{% static 'images/65.png'%}" id='65'></div>
+          <div class='ex'><img src="{% static 'images/66.png'%}" id='66'></div>
+          <div class='ex'><img src="{% static 'images/67.png'%}" id='67'></div>
+          <div class='ex'><img src="{% static 'images/68.png'%}" id='68'></div>
+          <div class='ex'><img src="{% static 'images/69.png'%}" id='69'></div>
+          <div class='ex'><img src="{% static 'images/70.png'%}" id='70'></div>
+          <div class='ex'><img src="{% static 'images/71.png'%}" id='71'></div>
+          <div class='ex'><img src="{% static 'images/72.png'%}" id='72'></div>
+          <div class='ex'><img src="{% static 'images/73.png'%}" id='73'></div>
+          <div class='ex'><img src="{% static 'images/74.png'%}" id='74'></div>
+          <div class='ex'><img src="{% static 'images/75.png'%}" id='75'></div>
+          <div class='ex'><img src="{% static 'images/76.png'%}" id='76'></div>
+          <div class='ex'><img src="{% static 'images/77.png'%}" id='77'></div>
+          <div class='ex'><img src="{% static 'images/78.png'%}" id='78'></div>
+          <div class='ex'><img src="{% static 'images/79.png'%}" id='79'></div>
+        </div>
+        <div>
+          <input type="button" value="Reset" style = "margin-left: 38%; margin-top: 5%" class = 'btn btn-md btn-info' id='reset'> <!--onClick="window.location.href=window.location.href"-->
+          <input type="submit" value="Submit" style = "margin-left: 44%; margin-top: 2%" class = 'btn btn-lg btn-primary' onClick="window.location.href=window.location.href">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+
+<button type = "submit" style = 'height:70px;width:150px;font-size:24px;align:center' class = 'btn btn-lg btn-primary'>Explore</button><br>
+</form>
+
+<br>
+Questions/Issues: <a href='mailto:mitchell.bailey@bmrn.com?Subject=DMD%20Mutation%20Explorer'> Contact Us </a>
+</div>
+</body>
+

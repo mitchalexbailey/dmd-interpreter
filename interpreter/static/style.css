@@ -1,0 +1,68 @@
+body {
+	background: rgba(238,48,78,0.4) url("images/horizontal_dna.png") no-repeat top;
+	font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+	font-size: 16px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 1000;
+	line-height: 19.99px;
+	text-align: center;}
+h1 {
+	margin-top: 250px;
+	text-align: center;
+	color:rgb(0,46,86);
+	font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+	font-size: 38px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 1000;
+	line-height: 26.4px;
+}
+h2 {
+	text-align: center;
+	color:rgb(53,61,152);
+	font-size: 28px;
+	font-style: normal;
+	font-weight: 500;
+	font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+	line-height: 30px;
+}
+
+h3 {
+	text-align: center;
+	color:rgb(0,80,156);
+	font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+	font-size: 20px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 500;
+	line-height: 24px;
+}
+p {
+	text-align: center;
+	font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+	font-size: 14px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 1000;
+	line-height: 19.99px;
+}
+blockquote {
+	text-align: center;
+	font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+	font-size: 21px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+	line-height: 29.99px;
+}
+pre {
+	text-align: center;
+	font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+	font-size: 13px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+	line-height: 18.57px;
+}
+

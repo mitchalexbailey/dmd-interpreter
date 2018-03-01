@@ -1,0 +1,23 @@
+large deletion w FS
+large deletion w/o FS
+large deletion with extension
+
+large duplication w FS
+large duplication w/o FS
+large duplication with extension
+
+deletion/insertion
+insertion
+intron only
+
+point mutation nonsense
+point mutation missense
+point mutation silent
+point mutation clinvar
+point mutation myvariant.info
+
+past_max
+no number
+no mutation type
+random characters
+negative number
