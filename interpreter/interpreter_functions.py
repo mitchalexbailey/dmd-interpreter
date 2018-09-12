@@ -239,7 +239,10 @@ def HGVS(positions, positions2, mtype, search_term, leng, ex_input, intron_list,
 			# 		notation = str(positions[0]), search_term, pm_change
 			if len(positions) == 1:
 				if len(intron_list[0]) ==0 and len(intron_list[1]) == 0:
-					notation = str(positions[0]),pm_pre,search_term, pm_change
+					if mtype != "Insertion":
+						notation = str(positions[0]),pm_pre,search_term, pm_change
+					else:
+						notation = str(positions[0]),"_",str(positions[0]+1),search_term, pm_change
 				elif len(intron_list[0]) != 0 and not genomic:
 					notation = str(positions[0]),"+",str(intron_list[0][1]),pm_pre,search_term, pm_change
 				elif len(intron_list[1]) != 0 and not genomic:
@@ -1732,7 +1735,7 @@ def aa_longform(aa, mutype, frame_shift, num_list, length_mutation, aa_ref):
 			temp_ind = lst.index(aa1)
 			aa1 = lst[temp_ind+1]
 			location = aa[1]
-			temp = "<b>p.",aa1, str(location), "*</b><br>\nAlso known as p.", aa1, str(location), "Ter (", "<i>*Note that the p.", aa1, str(location),"X terminology is outdated*</i>)"
+			temp = "<b>p.(",aa1, str(location), "*)</b><br>\nAlso known as p.(", aa1, str(location), "Ter) (", "<i>*Note that the p.", aa1, str(location),"X terminology is outdated*</i>)"
 			temp =''.join(temp)
 			return temp
 		if int(aa[1]) == 3686:
@@ -1972,18 +1975,21 @@ def output_statements(mut, mutype, length, aa_change, exon_numbers, part, frame_
 		   
 	if frame_shift and not nonsense:
 		change = []
-		for item in long_aa_change:
-		   if type(item) == str:
-				if '-' not in item:
-					change += [item]
-		if len(change)>0 and len(aa_seq) < len(aa_ref):
-			change1 = change[0]
-			start = re.findall("\d+", change1)
-			start = int(start[0])
-			end = int(aa_change[stop_index +1])
-			shift_stop = (end - start) + 1
-			temp = "p.(", change1, "fs*", str(shift_stop), ")"
-			statement3 = ''.join(temp)
+		if aa_change[0] == "STOP":
+			statement1 = long_aa_change
+		else:
+	 		for item in long_aa_change:
+			   if type(item) == str:
+					if '-' not in item:
+						change += [item]
+			if len(change)>0 and len(aa_seq) < len(aa_ref):
+				change1 = change[0]
+				start = re.findall("\d+", change1)
+				start = int(start[0])
+				end = int(aa_change[stop_index +1])
+				shift_stop = (end - start) + 1
+				temp = "p.(", change1, "fs*", str(shift_stop), ")"
+				statement3 = ''.join(temp)
 		# if len(change)>0 and len(aa_seq) > len(aa_ref):
 		# 	statement3 = PTC
 	return silent, missense, nonsense, statement1, statement2, statement3

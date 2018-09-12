@@ -560,7 +560,7 @@ def results(request):
 					if len(exon_ints) > 1:
 						mut = "Deletion of exons ", str(min(exon_ints)),"-",str(max(exon_ints))
 						mut = ''.join(mut)
-				if frame_shift:
+				if frame_shift and aa_change[0] != "STOP":
 					consequence = "<c style='color:red'>Frame Shift</c><br>"
 					consequence_statement = statement3
 				if silent:
@@ -568,7 +568,7 @@ def results(request):
 				if missense:
 					consequence = "<c style='color:orange'>Missense</c><br>"
 					consequence_statement = statement1
-				if nonsense:
+				if nonsense or (frame_shift and aa_change[0] == "STOP"):
 					consequence = "<c style='color:red'>Nonsense</c><br>"
 					consequence_statement = statement1
 				if (mutype == "Duplication" or mutype == "Insertion") and not frame_shift:
@@ -677,7 +677,7 @@ def results(request):
 				splice_message2 = "<c style='color:orange'><b>Predictions are not made for large mutations</b></c>"
 
 		# ESEFinder predictions are based on changes in consensus scores after mutation according to matrices at the Cold Spring Harbor Laboratory: <a href='http://rulai.cshl.edu/cgi-bin/tools/ESE3/esefinder.cgi?process=matrices'>http://rulai.cshl.edu/cgi-bin/tools/ESE3/esefinder.cgi?process=matrices</a> <br>Specific binding sites predicted to be effected are listed in brackets following ESEFinder.<br><br>
-		# Questions/Issues: <a href='mailto:mitchell.bailey@bmrn.com?Subject=DMD%20Mutation%20Explorer'> mitchell.bailey@bmrn.com </a><br>
+		# Questions/Issues: <a href='mailto:mitchalexbailey@gmail.com?Subject=DMD%20Mutation%20Explorer'> mitchalexbailey@gmail.com </a><br>
 
 
 		##EXON SKIPPING		
