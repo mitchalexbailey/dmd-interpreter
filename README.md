@@ -13,6 +13,9 @@ Clone/download dmd-interpreter then ```cd``` to the dmd-interpreter directory
 To activate virtual environment:
 ```. bin/activate```
 
+To download dependencites (requires python2.7 and corresponding pip):
+```pip install -r requirements.txt```
+
 To run locally (suggestions/contributions are welcomed!):
 ```python manage.py runserver```
 
