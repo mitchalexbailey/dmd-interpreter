@@ -15,3 +15,5 @@ To activate virtual environment:
 
 To run locally (suggestions/contributions are welcomed!):
 ```python manage.py runserver```
+
+Note: For static files to be served locally, ```DEBUG``` will need to be ```TRUE``` in ```settings.py```
