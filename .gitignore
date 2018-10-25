@@ -1,7 +1,7 @@
 # files
-pip-selfcheck.json
-.Python
-.DS_Store
+*/pip-selfcheck.json
+*/.Python
+*/.DS_Store
 
 # directories
 lib/
