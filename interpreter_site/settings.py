@@ -30,7 +30,9 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     'us0saf501a',
-    'us0saf501a.bmrn.com'
+    'us0saf501a.bmrn.com',
+    'dmd.nl',
+    'www.dmd.nl'
 ]
 
 
