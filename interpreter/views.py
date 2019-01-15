@@ -696,7 +696,7 @@ def results(request):
 				posskip += ["This variant type (missense; nonsense; small insertion, deletion, indel; or splice-affecting) has not been clinically tested in <i>DMD</i> with exon skip therapy."]
 			elif len(posskip) == 0 and length_mutation >= 32:
 				posskip += ["There are no theoretical exon skips predicted to apply to this mutation."]
-			elif nonsense:
+			if nonsense and not frame_shift:
 				readthrough_elig = "<c style='color:green'><b>Eligible</b></c>"
 			else:
 				pass
