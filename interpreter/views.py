@@ -588,9 +588,9 @@ def results(request):
 							temp += temp2
 					consequence_statement = temp
 				if (len(posskip)>0 and frame_shift and length_mutation>30) or nonsense:
-					therapy = "<c style='color:green'>Possibly</c> -- Please see 'Therapies' tab"
-				if len(posskip)==0 and not nonsense or (len(posskip)>0 and not frame_shift) or (not nonsense and length_mutation <= 30):
-					therapy = "<c style='color:orange'>Not currently</c> -- Please see 'Therapies' tab"
+					therapy = "<c style='color:green'>Possibly</c> - Please see 'Therapies' tab"
+				elif (len(posskip)==0 and not nonsense) or (len(posskip)>0 and not frame_shift) or (length_mutation <= 30 and not nonsense):
+					therapy = "<c style='color:orange'>Not currently</c> - Please see 'Therapies' tab"
 				if len(splice_test) > 1:
 					splice_message = "<c style='color:red'><b>Splice site alteration predicted</b></c>"
 				if (ese or ese_finder or ess) and (length_mutation < 30 or mutype=="Deletion/Insertion"):
@@ -696,6 +696,7 @@ def results(request):
 				posskip += ["This variant type (missense; nonsense; small insertion, deletion, indel; or splice-affecting) has not been clinically tested in <i>DMD</i> with exon skip therapy."]
 			elif len(posskip) == 0 and length_mutation >= 32:
 				posskip += ["There are no theoretical exon skips predicted to apply to this mutation."]
+			
 			if nonsense and not frame_shift:
 				readthrough_elig = "<c style='color:green'><b>Eligible</b></c>"
 			else:
