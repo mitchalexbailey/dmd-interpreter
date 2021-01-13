@@ -10,6 +10,7 @@ import subprocess
 import csv
 import re
 import pprint
+from urllib import urlencode
 
 interpreter_dir = os.path.dirname(__file__)
 
@@ -821,6 +822,7 @@ def results(request):
 		{'user_inp':mut,
 		'mutype':mutype,
 		'hgvs':standard_hgvs,
+		'hgvs_link': 'https://mutalyzer.nl/name-checker?' + urlencode({'description': 'NM_004006.2:'+standard_hgvs}),
 		'ghgvs':ghgvs,
 		'ghgvs19':ghgvs19,
 		'length_mutation':length_mutation,
