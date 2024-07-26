@@ -26,7 +26,7 @@
 							<tr>
 								<td>HGVS</td>
 								<td><b id="displayedHgvs">NM_004006.2:{{ hgvs }}</b>
-									&nbsp;&nbsp;<a href="https://mutalyzer.nl/normalizer/NM_004006.2:{{ hgvs }}" target="_blank">(Click here to verify variant at Mutalyzer)</a></td>
+									&nbsp;&nbsp;<a href="https://mutalyzer.nl/normalizer/NM_004006.2:{{hgvs|urlencode}}" target="_blank">(Click here to verify variant at Mutalyzer)</a></td>
 							</tr>
 							<tr>
 								<td>Genomic location (GRCh38)</td>
@@ -284,7 +284,7 @@
 			<div id = 'leiden' class = 'tab-pane'>
 				<div class = 'container'>
 					<div class='well' style='text-align:center;'>
-						To view at LOVD, click <a href= {{ leiden_link }} target="_blank">here</a>.
+						To view at LOVD, click <a href= {{ leiden_link|safe }} target="_blank">here</a>.
 					</div>
 					{{ leiden_frame|safe }}
 				</div>

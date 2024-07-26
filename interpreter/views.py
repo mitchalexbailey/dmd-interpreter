@@ -11,6 +11,7 @@ import csv
 import re
 import pprint
 from math import floor
+from urllib.parse import quote
 
 interpreter_dir = os.path.dirname(__file__)
 
@@ -789,9 +790,16 @@ def results(request):
 		if len(intron_list[1])>1:
 			search_nums += str(intron_list[1][1]) + " "
 
-		leiden_base_link ="https://databases.lovd.nl/shared/variants/DMD/unique?search_var_status=%3D%22Marked%22%7C%3D%22Public%22#object_id=VariantOnTranscriptUnique%2CVariantOnGenome&id=DMD&order=VariantOnTranscript%2FDNA%2CASC&search_transcriptid=00000024"
+		# Example: https://databases.lovd.nl/shared/variants/DMD/unique?search_var_status=%3D%22Marked%22%7C%3D%22Public%22#object_id=VariantOnTranscriptUnique%2CVariantOnGenome&id=DMD&search_transcriptid=00000024
+		leiden_base_link ="https://databases.lovd.nl/shared/variants/DMD/unique?search_var_status=%3D%22Marked%22%7C%3D%22Public%22#object_id=VariantOnTranscriptUnique%2CVariantOnGenome&id=DMD&search_transcriptid=00000024"
 		leiden_exon = f"search_VariantOnTranscript/Exon={' '.join(exon_numbers)}"
-		leiden_positions_type = f"search_VariantOnTranscript/DNA={standard_hgvs.split('c.')[-1].replace('+?', ' ').replace('-?', ' ').replace('_', ' ')}"
+		temp_nums = re.findall('\d+', standard_hgvs.split('c.')[-1])
+		leiden_positions_type = f"search_VariantOnTranscript/DNA={'%20'.join(temp_nums)}"
+		if '>' in standard_hgvs:
+			leiden_positions_type += f" {standard_hgvs.split('>')[-1]}"
+		for kwd in ['del', 'ins', 'dup']:
+			if kwd in standard_hgvs:
+				leiden_positions_type += f"%20{kwd}"
 		leiden_link = '&'.join([leiden_base_link, leiden_exon, leiden_positions_type])
 		iframe = "<iframe src='"+leiden_link+ "'align = 'center' width = '100%' height = '800' style = 'background-color: white'></iframe>"
 
