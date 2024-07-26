@@ -9,14 +9,14 @@ DOVE uses Python and the Django web framework to integrate existing open-access 
 
 ### Set up
 
-- _Requires Python2.7, corresponding pip, virtualenv, Perl_.
+- _Requires Python3.x, corresponding pip, virtualenv, Perl_.
 
 - Clone/download dmd-interpreter then `cd` to the dmd-interpreter directory.
 
 - Create and activate the virtual environment:
 
   ```
-  virtualenv DOVE_env --python=python2.7
+  virtualenv DOVE_env --python=python3.11
   . DOVE_env/bin/activate
   ```
 

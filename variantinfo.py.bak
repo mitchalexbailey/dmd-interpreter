@@ -107,7 +107,7 @@ def get_info(gene_symbol, hg, database='hg19'):
             for item in holder:
                 if len(item) > 1:
                     for subitem in item:
-                        print(subitem)
+                        print subitem
                         temp += [subitem[0]]
                 else:
                     temp += [item[0]]
@@ -128,11 +128,11 @@ def get_info(gene_symbol, hg, database='hg19'):
             genes += [item]
 
     if fuzzy:
-        print("Did you mean?:")
+        print "Did you mean?:"
         for index, item in enumerate(genes):
-            print(index,":", item)
-        print("none : none")
-        gene_index = input("Enter your choice: ")
+            print index,":", item
+        print "none : none"
+        gene_index = raw_input("Enter your choice: ")
         try:
             gene_index = int(gene_index)
             statement1 = "select name2 from refGene where name2 = '%s'" % genes[gene_index]
@@ -152,25 +152,25 @@ def get_info(gene_symbol, hg, database='hg19'):
             for item in temp[0]:
                 if item[0] not in genes:
                     genes += [item[0]]
-            print("Did you mean?:")
+            print "Did you mean?:"
             for index, item in enumerate(genes):
-                print(index,":", item)
-            print("none : none")
-            gene_index = input("Enter your choice: ")
+                print index,":", item
+            print "none : none"
+            gene_index = raw_input("Enter your choice: ")
             try:
                 gene_index = int(gene_index)
                 statement1 = "select name from refGene where name2 = '%s'" % genes[gene_index]
                 cur.execute(statement1)
                 temp = cur.fetchall()
             except:
-                print("Damn")
+                print "Damn"
         
     transcripts = []
     for index, item in enumerate(temp):
         transcripts += [item[0]]
     if len(transcripts) > 1:
-        print(index,": ",item[0])
-        trans_choice = eval(input("Please select a transcript from the list above: "))
+        print index,": ",item[0]
+        trans_choice = input("Please select a transcript from the list above: ")
     else:
         trans_choice = 0
     transcript = transcripts[trans_choice]

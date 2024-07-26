@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 {% include 'header.html' %}
 
 <div class='container'><br>
@@ -26,7 +26,7 @@
 							<tr>
 								<td>HGVS</td>
 								<td><b id="displayedHgvs">NM_004006.2:{{ hgvs }}</b>
-									&nbsp;&nbsp;<a href="https://mutalyzer.nl/name-checker?description=NM_004006.2:{{ hgvs }}" target="_blank">(Click here to check variant at Mutalyzer)</a></td>
+									&nbsp;&nbsp;<a href="https://mutalyzer.nl/normalizer/NM_004006.2:{{ hgvs }}" target="_blank">(Click here to verify variant at Mutalyzer)</a></td>
 							</tr>
 							<tr>
 								<td>Genomic location (GRCh38)</td>
@@ -295,7 +295,10 @@
 					<br>
 					
 					<div class='row' style='text-align:center'>
-						<p style='color:purple;font-size:18px'>*This is not an exhaustive list of work done on exon skipping in the <i>DMD</i> gene.*<br> If a paper/group has been missed, please <a href='mailto:mitchalexbailey@gmail.com?Subject=DMD%20Mutation%20Explorer'>Contact Us</a>.</p> 
+						<p>This web application has been described in an article published in Molecular Genetics and Genomic Medicine: Bailey M, Miller N. DMD Open-access Variant Explorer (DOVE): A scalable, open-access, web-based tool to aid in clinical interpretation of genetic variants in the DMD gene. Mol Genet Genomic Med. 2019; 7:e510. <a href="https://doi.org/10.1002/mgg3.510" target="_blank">https://doi.org/10.1002/mgg3.510</a>
+
+					<div class='row' style='text-align:center'>
+						<p style='font-size:18px'>*This is not an exhaustive list of work done on exon skipping in the <i>DMD</i> gene.*<br> If a paper/group has been missed, please <a href='mailto:mitchalexbailey@gmail.com?Subject=DMD%20Mutation%20Explorer'>Contact Us</a>.</p> 
 					 </div>
 
 					 <div class='row'>

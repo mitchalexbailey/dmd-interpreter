@@ -29,8 +29,6 @@ SESSION_COOKIE_SECURE = True
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'us0saf501a',
-    'us0saf501a.bmrn.com',
     'dmd.nl',
     'www.dmd.nl'
 ]
@@ -38,7 +36,7 @@ ALLOWED_HOSTS = [
 
 # Application definition
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,18 +45,17 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'interpreter',
     'bootstrap3',
-)
+]
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-)
+]
 
 ROOT_URLCONF = 'interpreter_site.urls'
 
@@ -111,7 +108,7 @@ USE_TZ = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'interpreter', 'static')
 STATIC_URL = '/static/'
-STATIC_DIRS = (
+STATICFILES_DIRS = [
    os.path.join(BASE_DIR, 'static'),
    os.path.join(BASE_DIR, 'static', 'interpreter'),
-)
+]

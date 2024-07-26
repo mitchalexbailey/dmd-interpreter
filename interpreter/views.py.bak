@@ -1,16 +1,15 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
-from django.urls import reverse
+from django.core.urlresolvers import reverse
 from .forms import IndexForm, ACMGForm
 
-from .interpreter_functions import *
+from interpreter_functions import *
 import os,sys
 import subprocess
 import csv
 import re
 import pprint
-from math import floor
 
 interpreter_dir = os.path.dirname(__file__)
 
@@ -57,7 +56,7 @@ def results(request):
 	f.close()
 
 	#Coding region location (c.###) to exon number location conversion
-	with open(os.path.join(interpreter_dir, "exon_positions.csv"), 'r', encoding='utf-8') as csvfile:
+	with open(os.path.join(interpreter_dir, "exon_positions.csv"),'rb') as csvfile:
 	    spamreader = csv.reader(csvfile)
 	    temp = []
 	    for row in spamreader:
@@ -76,7 +75,7 @@ def results(request):
 	                    i+=1
 
 	#Domain positions
-	with open(os.path.join(interpreter_dir, "domains.txt"),'r') as csvfile:
+	with open(os.path.join(interpreter_dir, "domains.txt"),'rb') as csvfile:
 		spamreader = csv.reader(csvfile)
 		temp = []
 		for row in spamreader:
@@ -94,7 +93,7 @@ def results(request):
 
 
 	#Exon positions in genomic DNA (GRCh38, hg38)
-	with open(os.path.join(interpreter_dir, "exons_in_genomic_old.txt"), 'r') as csvfile:
+	with open(os.path.join(interpreter_dir, "exons_in_genomic_old.txt"), 'rb') as csvfile:
 		spamreader = csv.reader(csvfile)
 		temp = []
 		for row in spamreader:
@@ -106,7 +105,7 @@ def results(request):
 				intermediate+=[int(subitem)]
 			genomic_positions1 += [intermediate]
 
-	with open(os.path.join(interpreter_dir, "exons_in_genomic.txt"), 'r') as csvfile:
+	with open(os.path.join(interpreter_dir, "exons_in_genomic.txt"), 'rb') as csvfile:
 		spamreader = csv.reader(csvfile)
 		temp = []
 		for row in spamreader:
@@ -118,7 +117,7 @@ def results(request):
 				intermediate+=[int(subitem)]
 			genomic_positions2 += [intermediate]
 
-	with open("./interpreter/exons_in_genomic_hg19.txt", 'r') as csvfile:
+	with open("./interpreter/exons_in_genomic_hg19.txt", 'rb') as csvfile:
 		spamreader = csv.reader(csvfile)
 		temp = []
 		for row in spamreader:
@@ -496,7 +495,7 @@ def results(request):
 							i+=1
 						start1 = 0
 						end1 = num_list[0] #if there's no frame shift, the filler will line up perfectly.
-						aa_seqgapped = aa_seq[start1:floor(end1/3)] + filler + aa_seq[floor(end1/3):]
+						aa_seqgapped = aa_seq[start1:(end1/3)] + filler + aa_seq[(end1/3):]
 						aa_seqgapped = ''.join(aa_seqgapped)
 						boundary_change, useless, PTC = easy_align(aa_ref, aa_seqgapped, mutype, frame_shift, True)
 					if frame_shift:
@@ -686,7 +685,7 @@ def results(request):
 				if part == True:
 					posskip = []
 			if part and ex_input:
-				print(part)
+				print part
 				posskip = []
 				posskip += ["This variant includes a partial exon deletion."]
 			elif not frame_shift:
@@ -789,11 +788,22 @@ def results(request):
 		if len(intron_list[1])>1:
 			search_nums += str(intron_list[1][1]) + " "
 
-		leiden_base_link ="https://databases.lovd.nl/shared/variants/DMD/unique?search_var_status=%3D%22Marked%22%7C%3D%22Public%22#object_id=VariantOnTranscriptUnique%2CVariantOnGenome&id=DMD&order=VariantOnTranscript%2FDNA%2CASC&search_transcriptid=00000024"
-		leiden_exon = f"search_VariantOnTranscript/Exon={' '.join(exon_numbers)}"
-		leiden_positions_type = f"search_VariantOnTranscript/DNA={standard_hgvs.split('c.')[-1].replace('+?', ' ').replace('-?', ' ').replace('_', ' ')}"
-		leiden_link = '&'.join([leiden_base_link, leiden_exon, leiden_positions_type])
-		iframe = "<iframe src='"+leiden_link+ "'align = 'center' width = '100%' height = '800' style = 'background-color: white'></iframe>"
+		if search == ">":
+			pmindex = standard_hgvs.index(">")
+			standard_hgvs_search = standard_hgvs[0:pmindex], "%3E",pm_change
+			standard_hgvs_search = ''.join(standard_hgvs_search)
+			leiden_link ="https://databases.lovd.nl/shared/variants/DMD/unique?search_var_status=%3D%22Marked%22%7C%3D%22Public%22#object_id=VariantOnTranscriptUnique%2CVariantOnGenome&id=DMD&order=VariantOnTranscript%2FDNA%2CASC&skip[chromosome]=chromosome&skip[allele_]=allele_&skip[transcriptid]=transcriptid&search_transcriptid=00000024&skip[owner_countryid]=owner_countryid&FRMatchType_CustomVL_VOTunique_VOG_DMD=1&FRMatchType_CustomVL_VOTunique_VOG_DMD=2&FRMatchType_CustomVL_VOTunique_VOG_DMD=3&FRReplaceAll_CustomVL_VOTunique_VOG_DMD=1&=Preview&=Cancel&=Submit&search_VariantOnTranscript/DNA="+standard_hgvs_search
+			iframe = "<iframe src='"+ leiden_link+"'&search_Variant%2FRNA=&search_Variant%2FProtein=&search_Patient%2FPhenotype%2FDisease=' align = 'center' width = '100%' height = '800' style='background-color: white'></iframe>"
+		elif length_mutation > 30 and mutype != "Deletion/Insertion":
+			leiden_link = "https://databases.lovd.nl/shared/variants/DMD/unique?search_var_status=%3D%22Marked%22%7C%3D%22Public%22#object_id=VariantOnTranscriptUnique%2CVariantOnGenome&id=DMD&order=VariantOnTranscript%2FDNA%2CASC&skip[chromosome]=chromosome&skip[allele_]=allele_&skip[transcriptid]=transcriptid&search_transcriptid=00000024&skip[owner_countryid]=owner_countryid&FRMatchType_CustomVL_VOTunique_VOG_DMD=1&FRMatchType_CustomVL_VOTunique_VOG_DMD=2&FRMatchType_CustomVL_VOTunique_VOG_DMD=3&FRReplaceAll_CustomVL_VOTunique_VOG_DMD=1&=Preview&=Cancel&=Submit&search_VariantOnTranscript/DNA="+search_nums+"%20"+search
+			iframe = "<iframe src='"+leiden_link+ "'align = 'center' width = '100%' height = '800' style = 'background-color: white'></iframe>"
+		elif length_mutation < 30 and mutype != "Point mutation":
+			#leiden_link = "https://databases.lovd.nl/shared/variants/DMD/unique?search_var_status=%3D%22Marked%22%7C%3D%22Public%22#object_id=VariantOnTranscriptUnique%2CVariantOnGenome&id=DMD&order=VariantOnTranscript%2FDNA%2CASC&skip[chromosome]=chromosome&skip[allele_]=allele_&skip[transcriptid]=transcriptid&search_transcriptid=00000024&skip[owner_countryid]=owner_countryid&FRMatchType_CustomVL_VOTunique_VOG_DMD=1&FRMatchType_CustomVL_VOTunique_VOG_DMD=2&FRMatchType_CustomVL_VOTunique_VOG_DMD=3&FRReplaceAll_CustomVL_VOTunique_VOG_DMD=1&=Preview&=Cancel&=Submit&search_VariantOnTranscript/DNA="+search_nums+"%20"+search
+			leiden_link = "https://databases.lovd.nl/shared/variants/DMD/unique?search_var_status=%3D%22Marked%22%7C%3D%22Public%22#object_id=VariantOnTranscriptUnique%2CVariantOnGenome&id=DMD&order=VariantOnTranscript%2FDNA%2CASC&skip[chromosome]=chromosome&skip[allele_]=allele_&skip[transcriptid]=transcriptid&search_transcriptid=00000024&skip[owner_countryid]=owner_countryid&FRMatchType_CustomVL_VOTunique_VOG_DMD=1&FRMatchType_CustomVL_VOTunique_VOG_DMD=2&FRMatchType_CustomVL_VOTunique_VOG_DMD=3&FRReplaceAll_CustomVL_VOTunique_VOG_DMD=1&=Preview&=Cancel&=Submit&search_VariantOnTranscript/DNA="+standard_hgvs_search
+			iframe = "<iframe src='"+leiden_link+ "'align = 'center' width = '100%' height = '800' style = 'background-color: white'></iframe>"
+		else:
+			leiden_link = "https://databases.lovd.nl/shared/variants/DMD/unique?search_var_status=%3D%22Marked%22%7C%3D%22Public"
+			iframe = "<iframe src='"+leiden_link+ "'align = 'center' width = '100%' height = '800' style = 'background-color: white'></iframe>"
 
 		if nsfp_score == '':
 			nsfp_score = 'N/A'

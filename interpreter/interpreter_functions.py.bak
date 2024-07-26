@@ -3,7 +3,6 @@ from django.utils.http import urlencode
 import os,sys
 import subprocess
 import re
-from math import floor
 
 
 
@@ -201,7 +200,7 @@ def HGVS(positions, positions2, mtype, search_term, leng, ex_input, intron_list,
 			leng = leng
 	if len(positions)!=0:
 		if leng > 30 and ex_input:
-			notation = str(min(positions)), "_" ,str(max(positions)), search_term #update to new HGVS notation
+			notation = str(min(positions)), "-?_" ,str(max(positions)),"+?", search_term #update to new HGVS notation
 		if not genomic:
 			if not ex_input and len(positions) > 1:
 				notation = str(min(positions)),"_",str(max(positions)), search_term, pm_change
@@ -249,7 +248,7 @@ def HGVS(positions, positions2, mtype, search_term, leng, ex_input, intron_list,
 				elif len(intron_list[1]) != 0 and not genomic:
 					notation = str(positions[0]),str(intron_list[1][1]),pm_pre,search_term, pm_change
 				else:
-					print("uncaught issue in HGVS()")
+					print "uncaught issue in HGVS()"
 		else:
 			if len(positions) == 1:
 				notation = str(positions[0]),pm_pre,search_term, pm_change
@@ -258,7 +257,7 @@ def HGVS(positions, positions2, mtype, search_term, leng, ex_input, intron_list,
 				notation = str(min(positions)),"_",str(max(positions)),pm_pre,search_term,pm_change
 				notation2 = str(min(positions2)),"_",str(max(positions2)),pm_pre,search_term,pm_change
 			else:
-				print("uncaught issue in genomic HGVS()")
+				print "uncaught issue in genomic HGVS()"
 	notation = ''.join(notation)
 	notation2 = ''.join(notation2)
 	hgvs += notation
@@ -334,7 +333,7 @@ def get_length(mutation, mutation_type, positions, mutation_inp, xon, dna=''):
 						break
 					elif mutation[i-j] in "0123456789":
 						pre_change = dna[positions[0] + 243]
-						print("here: ", pre_change)
+						print "here: ", pre_change
 						break
 					j-=1
 				mut = mutation[i+1:]
@@ -352,7 +351,7 @@ def get_length(mutation, mutation_type, positions, mutation_inp, xon, dna=''):
 						break
 					elif mutation[i-j] in "0123456789":
 						pre_change = dna[positions[0] + 243]
-						print("here: ", pre_change)
+						print "here: ", pre_change
 						break
 					j+=1   
 				mut = mutation[i+1:]
@@ -498,13 +497,16 @@ def splice_check(gen_pos, length_mutation, mut_genomic_dna, genomic_dna):
 				change = float(mut_score[index]) - float(ref_item)
 				percent = (change/abs(float(ref_item))) *100
 				if percent > 0:
-					percent_html = f"<c style='color:red'>+{str('%.2f' % percent)}% </c>"
+					percent = "<c style='color:red'>+", str("%.2f" % percent), "% </c>"
+					percent = ''.join(percent)
 				if percent <= 0:
-					percent_html = f"<c style='color:red'>-{str('%.2f' % percent)}% </c>"
+					percent = "<c style='color:red'>",str("%.2f" % percent),"% </c>"
+					percent = ''.join(percent)
 				if change > 0:
-					change_html = f"+{change}"
+					change = "+", str(change)
+					change = ''.join(change)
 				if change != 0:
-					affected += [donor_frags[index], ref_score[index], donor_mfrags[index], mut_score[index], "<b> Donor </b>", change_html, percent_html]
+					affected += [donor_frags[index], ref_score[index], donor_mfrags[index], mut_score[index], "<b> Donor </b>", str(change), percent]
 		i = 0
 		acceptor_frags = []
 		acceptor_mfrags = []
@@ -520,13 +522,16 @@ def splice_check(gen_pos, length_mutation, mut_genomic_dna, genomic_dna):
 				change = float(mut_score[index]) - float(ref_item)
 				percent = (change/abs(float(ref_item))) *100
 				if percent > 0:
-					percent_html = f"<c style='color:red'>+{str('%.2f' % percent)}% </c>"
+					percent = "<c style='color:red'>+", str("%.2f" % percent), "% </c>"
+					percent = ''.join(percent)
 				if percent <= 0:
-					percent_html = f"<c style='color:red'>-{str('%.2f' % percent)}% </c>"
+					percent = "<c style='color:red'>",str("%.2f" % percent),"% </c>"
+					percent = ''.join(percent)
 				if change > 0:
-					change_html = f"+{change}"
+					change = "+", str(change)
+					change = ''.join(change)
 				if change != 0:
-					affected += [donor_frags[index], ref_score[index], donor_mfrags[index], mut_score[index], "<b> Acceptor </b>", change_html, percent_html]
+					affected += [acceptor_frags[index], ref_score[index], acceptor_mfrags[index], mut_score[index], "<b> Acceptor </b>", str(change), percent]
 	if len(affected)==0:
 		affected += ["False"]
 	return affected
@@ -1020,9 +1025,9 @@ def possible_skips(ex_ints, length, refcdna, frame_shift, exon_positions, mutype
 				i+=1
 			end = (exon_positions[left_ind][1])
 			if end%3 == 1 or end%3 == 0:
-				aa_skipgap = aa_skip[0:floor(end/3)] + filler + aa_skip[floor(end/3):]
+				aa_skipgap = aa_skip[0:(end/3)] + filler + aa_skip[(end/3):]
 			if end%3 == 2:
-				aa_skipgap = aa_skip[0:floor(end/3)+1] + filler + aa_skip[(end/3)+1:]					
+				aa_skipgap = aa_skip[0:(end/3)+1] + filler + aa_skip[(end/3)+1:]	            	
 			aa_skipgap = ''.join(aa_skipgap)
 			delta, align, PTC = easy_align(aa_ref, aa_skipgap, mutype, frame_shift)
 			for index, item in enumerate(delta):
@@ -1035,7 +1040,7 @@ def possible_skips(ex_ints, length, refcdna, frame_shift, exon_positions, mutype
 				except:
 					pass
 			if len(delta2) == 0:
-				delta2+=['No amino acid change predicted']				
+				delta2+=['No amino acid change predicted']	            
 			temp = "<c style='color:green'><b>Exon ", str(left_ind +1), "</b></c><br> (Change at boundary: ", delta2[0], ")"
 			temp = ''.join(temp)
 			skips += [temp]
@@ -1050,12 +1055,12 @@ def possible_skips(ex_ints, length, refcdna, frame_shift, exon_positions, mutype
 			while i < (length + right_length)/3:
 				filler += '-'
 				i += 1
-			aa_skipgap = aa_skip[0:floor(min(num_list)/3)] + filler + aa_skip[floor(min(num_list)/3):]
+			aa_skipgap = aa_skip[0:min(num_list)/3] + filler + aa_skip[(min(num_list))/3:]
 			end = min(num_list)
 			if end%3 == 1:
-				aa_skipgap = aa_skip[0:floor(end/3)] + filler + aa_skip[floor(end/3):]
+				aa_skipgap = aa_skip[0:(end/3)] + filler + aa_skip[(end/3):]
 			if end%3 == 2:
-				aa_skipgap = aa_skip[0:floor(end/3)+1] + filler + aa_skip[floor(end/3)+1:]
+				aa_skipgap = aa_skip[0:(end/3)+1] + filler + aa_skip[(end/3)+1:]
 			aa_skipgap = ''.join(aa_skipgap)
 			delta, align, PTC = easy_align(aa_ref, aa_skipgap, mutype, frame_shift)
 			for index, item in enumerate(delta):
@@ -1085,9 +1090,9 @@ def possible_skips(ex_ints, length, refcdna, frame_shift, exon_positions, mutype
 				i+=1
 			end = (exon_positions[left_ind][1])
 			if end%3 == 1 or end%3 == 0:
-				aa_skipgap = aa_skip[0:floor(end/3)] + filler + aa_skip[floor(end/3):]
+				aa_skipgap = aa_skip[0:(end/3)] + filler + aa_skip[(end/3):]
 			if end%3 == 2:
-				aa_skipgap = aa_skip[0:floor(end/3)+1] + filler + aa_skip[floor(end/3)+1:]		  
+				aa_skipgap = aa_skip[0:(end/3)+1] + filler + aa_skip[(end/3)+1:]		  
 			aa_skipgap = ''.join(aa_skipgap)
 			delta, align, PTC = easy_align(aa_ref, aa_skipgap, mutype, frame_shift)
 			for index, item in enumerate(delta):
@@ -1116,13 +1121,13 @@ def possible_skips(ex_ints, length, refcdna, frame_shift, exon_positions, mutype
 				i+=1
 			end = (exon_positions[left2_ind][1])
 			if end%3 == 2:
-				aa_skipgap = aa_skip[0:floor(end/3)] + filler + aa_skip[floor(end/3):]
+				aa_skipgap = aa_skip[0:(end/3)] + filler + aa_skip[(end/3):]
 			if end%3 == 1:
-				aa_skipgap = aa_skip[0:floor(end/3)+1] + filler + aa_skip[(end/3)+1:]		  
+				aa_skipgap = aa_skip[0:(end/3)+1] + filler + aa_skip[(end/3)+1:]		  
 			aa_skipgap = ''.join(aa_skipgap)
 			delta, align, PTC = easy_align(aa_ref, aa_skipgap, mutype, frame_shift)
 			for index, item in enumerate(delta):
-				print(index, item)
+				print index, item
 				if type(item) != int and '-' not in item:
 					if item != 'STOP':
 						delta2+=[item]
@@ -1132,7 +1137,7 @@ def possible_skips(ex_ints, length, refcdna, frame_shift, exon_positions, mutype
 				except:
 					pass
 			if len(delta2) == 0:
-				delta2+=['No amino acid change predicted']			   
+				delta2+=['No amino acid change predicted']	           
 			temp = "<c style='color:green'><b>Exon ", str(left2_ind +1), ' and ', str(left_ind +1), "</b></c><br> (Change at boundary: ", delta2[0], ")"
 			temp = ''.join(temp)
 			skips += [temp]
@@ -1149,9 +1154,9 @@ def possible_skips(ex_ints, length, refcdna, frame_shift, exon_positions, mutype
 				i+=1
 			end = min(num_list)
 			if end%3 == 1 or end%3 == 0:
-				aa_skipgap = aa_skip[0:floor(end/3)] + filler + aa_skip[floor(end/3):]
+				aa_skipgap = aa_skip[0:(end/3)] + filler + aa_skip[(end/3):]
 			if end%3 == 2:
-				aa_skipgap = aa_skip[0:floor(end/3)+1] + filler + aa_skip[(end/3)+1:]		  
+				aa_skipgap = aa_skip[0:(end/3)+1] + filler + aa_skip[(end/3)+1:]		  
 			aa_skipgap = ''.join(aa_skipgap)
 			delta, align, PTC = easy_align(aa_ref, aa_skipgap, mutype, frame_shift)
 			for index, item in enumerate(delta):
@@ -1164,10 +1169,10 @@ def possible_skips(ex_ints, length, refcdna, frame_shift, exon_positions, mutype
 				except:
 					pass
 			if len(delta2) == 0:
-				delta2+=['No amino acid change predicted']				
+				delta2+=['No amino acid change predicted']	            
 			temp = "<c style='color:green'><b>Exon ", str(right_ind +1), ' and ', str(right2_ind +1), "</b></c><br> (Change at boundary: ", delta2[0], ")"
 			temp = ''.join(temp)
-			skips += [temp]					   
+			skips += [temp]		               
 	if mutype == "Duplication":
 		if len(ex_ints)==1:
 			temp = "<c style='color:green'><b>Exon ", str(ex_ints[0]), "</b></c> (Only tested <i>in vitro</i>)\n"
@@ -1186,9 +1191,9 @@ def possible_skips(ex_ints, length, refcdna, frame_shift, exon_positions, mutype
 					i+=1
 			end = (exon_positions[left_ind][1])
 			if end%3 == 2:
-				aa_skipgap = aa_skip[0:floor(end/3)] + filler + aa_skip[floor(end/3):]
+				aa_skipgap = aa_skip[0:(end/3)] + filler + aa_skip[(end/3):]
 			if end%3 == 1:
-				aa_skipgap = aa_skip[0:floor(end/3)+1] + filler + aa_skip[(end/3)+1:]		  
+				aa_skipgap = aa_skip[0:(end/3)+1] + filler + aa_skip[(end/3)+1:]		  
 			aa_skipgap = ''.join(aa_skipgap)
 			delta, align, PTC = easy_align(aa_ref, aa_skipgap, mutype, frame_shift)
 			for index, item in enumerate(delta):
@@ -1218,9 +1223,9 @@ def possible_skips(ex_ints, length, refcdna, frame_shift, exon_positions, mutype
 				i += 1
 			end = min(num_list)
 			if end%3 == 1:
-				aa_skipgap = aa_skip[0:floor(end/3)] + filler + aa_skip[floor(end/3):]
+				aa_skipgap = aa_skip[0:(end/3)] + filler + aa_skip[(end/3):]
 			if end%3 == 2:
-				aa_skipgap = aa_skip[0:floor(end/3)+1] + filler + aa_skip[(end/3)+1:]		  
+				aa_skipgap = aa_skip[0:(end/3)+1] + filler + aa_skip[(end/3)+1:]		  
 			aa_skipgap = ''.join(aa_skipgap)
 			delta, align, PTC = easy_align(aa_ref, aa_skipgap, mutype, frame_shift)
 			for index, item in enumerate(delta):
@@ -1250,9 +1255,9 @@ def possible_skips(ex_ints, length, refcdna, frame_shift, exon_positions, mutype
 				i+=1
 			end = min(num_list)
 			if end%3 == 1:
-				aa_skipgap = aa_skip[0:floor(end/3)] + filler + aa_skip[floor(end/3):]
+				aa_skipgap = aa_skip[0:(end/3)] + filler + aa_skip[(end/3):]
 			if end%3 == 2:
-				aa_skipgap = aa_skip[0:floor(end/3)+1] + filler + aa_skip[(end/3)+1:]		  
+				aa_skipgap = aa_skip[0:(end/3)+1] + filler + aa_skip[(end/3)+1:]		  
 			aa_skipgap = ''.join(aa_skipgap)
 			delta, align, PTC = easy_align(aa_ref, aa_skipgap, mutype, frame_shift)
 			for index, item in enumerate(delta):
@@ -1520,7 +1525,7 @@ def ese_find(cdna, refcdna, ese_list, ess_list, gen_pos, genomic_dna, length_mut
 		if mx > 0:
 			mx = '+', str(mx)
 			mx = ''.join(mx)
-		esef = True			
+		esef = True	    	
 		temp = ["SRp55", str(mx), perc]
 		ese_types += [temp]
 	return rese, ress, esef, ese_types, ess_types
@@ -1700,12 +1705,12 @@ def aa_longform(aa, mutype, frame_shift, num_list, length_mutation, aa_ref):
 	Adds detail to nonsense mutations (the different accepted notations; Ter and *)
 	Creates HGVS for amino acid deletions (i.e in-frame deletions)
 	"""
-	lst = ['A','Ala','C','Cys','D','Asp','E','Glu','F','Phe','G','Gly','H','His','I','Ile','K','Lys','L','Leu','M','Met','N','Asn','P','Pro','Q','Gln','R','Arg','S','Ser','T','Thr','V','Val','W','Trp','Y','Tyr','*','*']																							 
+	lst = ['A','Ala','C','Cys','D','Asp','E','Glu','F','Phe','G','Gly','H','His','I','Ile','K','Lys','L','Leu','M','Met','N','Asn','P','Pro','Q','Gln','R','Arg','S','Ser','T','Thr','V','Val','W','Trp','Y','Tyr','*','*']	                                                                                         
 	if mutype == "Deletion" and not frame_shift:
-		first_position = floor(floor(min(num_list)/3))
+		first_position = min(num_list)/3
 		if min(num_list)%3==2:
 			first_position += 1
-		last_position = first_position + floor(length_mutation/3)
+		last_position = first_position + length_mutation/3
 		first_aa = aa_ref[first_position]
 		last_aa = aa_ref[last_position]
 		first_aa_index = lst.index(first_aa)
@@ -1967,14 +1972,14 @@ def output_statements(mut, mutype, length, aa_change, exon_numbers, part, frame_
 						chngs += chng
 				temp =  chngs
 				statement1 = ''.join(temp)
-
+		   
 	if frame_shift and not nonsense:
 		change = []
 		if aa_change[0] == "STOP":
 			statement1 = long_aa_change
 		else:
-			for item in long_aa_change:
-				if type(item) == str:
+	 		for item in long_aa_change:
+			   if type(item) == str:
 					if '-' not in item:
 						change += [item]
 			if len(change)>0 and len(aa_seq) < len(aa_ref):
@@ -2086,113 +2091,113 @@ def ClinVar(mvr, hgvs):
 
 
 def map_c2g(clist, exStart, exEnd, cStart, cEnd, strnd, chrom):
-	"""
-	does this provide help?
-	"""
-	#cnums for only numbers from cHGVS
-	#other for everything after numbers in hgvs
-	cnums = []
-	other = []
-	for item in clist:
-		temp = re.findall("\d+", item)
-		if len(temp) != 0:
-			cnums += [temp[0]]
-			ind = item.index(temp[len(temp)-1])
-			therest = item[ind + len(temp[len(temp)-1]):]
-			other += [therest]
-		else:
-			cnums += [-1]
-	#gnums for only numbers for genomic
-	gnums = []
-	cum = []
-	cumCount = 0
-	cStart = int(cStart)
-	cEnd = int(cEnd)
-	if strnd == "-":
-		temp = str(exStart)
-		temp2 = str(exEnd)
-		exStart = (temp2.split(","))[::-1]
-		exEnd = (temp.split(","))[::-1]
-		temp = cStart
-		temp2 = cEnd
-		cStart = temp2
-		cEnd = temp
-	else:
-		exStart = (str(exStart).split(","))
-		exEnd = (str(exEnd).split(","))
-	while '' in exStart:
-		exStart.remove('')
-	while '' in exEnd:
-		exEnd.remove('')
-	i = 0
-	while i<len(exStart) and i <len(exEnd):
-		exStart[i] = int(exStart[i])
-		exEnd[i] = int(exEnd[i])
-		i += 1
-	lengths = []
-	if strnd == "+":
-		i = 0
-		if exEnd[0] > cStart: 
-			lengths += [abs(exEnd[i] - cStart)]
-			i += 1
-		else:
-			while exEnd[0] < cStart:
-				exEnd.remove(exEnd[0])
-				exStart.remove(exStart[0])
-		while i <len(exEnd):
-			lengths += [abs(exEnd[i] - exStart[i])]
-			i += 1
-	if strnd == "-":
-		i = 0
-		if exEnd[0] < cStart:
-			lengths += [abs(exEnd[i] - cStart)]
-			i += 1
-		else:
-			while exEnd[0] > cStart:
-				exEnd.remove(exEnd[0])
-				exStart.remove(exStart[0])
-		while i <len(exEnd):
-			lengths += [abs(exEnd[i] - exStart[i])]
-			i += 1
-	for item in lengths:
-		cum += [cumCount]
-		cumCount += item
-	for item in cnums:
-		found = False
-##		if type(item) == list:
-##			item = item[0]
-		item = int(item)
-		i = 0
-		while i<len(cum)-1 and not found:
-			if item > cum[i] and item < cum[i+1]:
-				diff = abs(item-cum[i])
-				if strnd == "-":
-					temp = exStart[i] - diff + 1
-				if strnd == "+":
-					temp = exStart[i] + diff
-				gnums += [temp]
-				found = True
-			i += 1
-		if not found:
-			if item > cum[len(cum)-1]:
-				diff = abs(item-cum[len(cum)-1])
-				if strnd == "-":
-					temp = exStart[i] - diff + 1
-				if strnd == "+":
-					temp = exStart[i] + diff
-				gnums += [temp]
-				found = True
-			else:
-				gnums += [-1]
-	gnote = []
-	gother = []
-	for item in other:
-		gother += [rev_comp(item, False, False)]
-	i = 0
-	while i<len(gnums) and i <len(gother):
-		gnote += ["%s:g.%s%s" % (chrom, gnums[i], gother[i])]
-		i += 1
-	return gnums, gnote
+    """
+    does this provide help?
+    """
+    #cnums for only numbers from cHGVS
+    #other for everything after numbers in hgvs
+    cnums = []
+    other = []
+    for item in clist:
+        temp = re.findall("\d+", item)
+        if len(temp) != 0:
+            cnums += [temp[0]]
+            ind = item.index(temp[len(temp)-1])
+            therest = item[ind + len(temp[len(temp)-1]):]
+            other += [therest]
+        else:
+            cnums += [-1]
+    #gnums for only numbers for genomic
+    gnums = []
+    cum = []
+    cumCount = 0
+    cStart = int(cStart)
+    cEnd = int(cEnd)
+    if strnd == "-":
+        temp = str(exStart)
+        temp2 = str(exEnd)
+        exStart = (temp2.split(","))[::-1]
+        exEnd = (temp.split(","))[::-1]
+        temp = cStart
+        temp2 = cEnd
+        cStart = temp2
+        cEnd = temp
+    else:
+        exStart = (str(exStart).split(","))
+        exEnd = (str(exEnd).split(","))
+    while '' in exStart:
+        exStart.remove('')
+    while '' in exEnd:
+        exEnd.remove('')
+    i = 0
+    while i<len(exStart) and i <len(exEnd):
+        exStart[i] = int(exStart[i])
+        exEnd[i] = int(exEnd[i])
+        i += 1
+    lengths = []
+    if strnd == "+":
+        i = 0
+        if exEnd[0] > cStart: 
+            lengths += [abs(exEnd[i] - cStart)]
+            i += 1
+        else:
+            while exEnd[0] < cStart:
+                exEnd.remove(exEnd[0])
+                exStart.remove(exStart[0])
+        while i <len(exEnd):
+            lengths += [abs(exEnd[i] - exStart[i])]
+            i += 1
+    if strnd == "-":
+        i = 0
+        if exEnd[0] < cStart:
+            lengths += [abs(exEnd[i] - cStart)]
+            i += 1
+        else:
+            while exEnd[0] > cStart:
+                exEnd.remove(exEnd[0])
+                exStart.remove(exStart[0])
+        while i <len(exEnd):
+            lengths += [abs(exEnd[i] - exStart[i])]
+            i += 1
+    for item in lengths:
+        cum += [cumCount]
+        cumCount += item
+    for item in cnums:
+        found = False
+##        if type(item) == list:
+##            item = item[0]
+        item = int(item)
+        i = 0
+        while i<len(cum)-1 and not found:
+            if item > cum[i] and item < cum[i+1]:
+                diff = abs(item-cum[i])
+                if strnd == "-":
+                    temp = exStart[i] - diff + 1
+                if strnd == "+":
+                    temp = exStart[i] + diff
+                gnums += [temp]
+                found = True
+            i += 1
+        if not found:
+            if item > cum[len(cum)-1]:
+                diff = abs(item-cum[len(cum)-1])
+                if strnd == "-":
+                    temp = exStart[i] - diff + 1
+                if strnd == "+":
+                    temp = exStart[i] + diff
+                gnums += [temp]
+                found = True
+            else:
+                gnums += [-1]
+    gnote = []
+    gother = []
+    for item in other:
+        gother += [rev_comp(item, False, False)]
+    i = 0
+    while i<len(gnums) and i <len(gother):
+        gnote += ["%s:g.%s%s" % (chrom, gnums[i], gother[i])]
+        i += 1
+    return gnums, gnote
 
 def get_exons(inf, sequence):
 	starts = inf[9]
@@ -2250,12 +2255,12 @@ def get_exons(inf, sequence):
 			temp_length -= abs(codingStart-tStart)
 		if temp_length < 0:
 			temp_length = abs(stops[i]-starts[i])
-		lengths += [temp_length]
-		temp_start = length_cum
-		temp_end = length_cum + temp_length
-		# if strnd == "-":
-		# 	temp_end +=1
-		if i<len(starts)-1:
+ 		lengths += [temp_length]
+ 		temp_start = length_cum
+ 		temp_end = length_cum + temp_length
+ 		# if strnd == "-":
+ 		# 	temp_end +=1
+ 		if i<len(starts)-1:
 			exons += [codingSeq[temp_start: temp_end]]
 			exons_styled += ["<c class='exon' id='exon%s' style='color:%s'>%s</c>" % (str(i+1),'gray', codingSeq[temp_start: temp_end])]
 		else:
