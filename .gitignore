@@ -1,11 +1,16 @@
 # files
-*/pip-selfcheck.json
-*/.Python
-*/.DS_Store
+.DS_Store
+.Python
+db.sqlite3
+pip-selfcheck.json
+
+# Temp files.
+interpreter/temp.txt
+interpreter/templates/triage.html
 
 # directories
-lib/
-include/
-bin/
+.idea/
+__pycache__/
+DOVE_env/
 env/
 
