@@ -4,6 +4,7 @@
 */.DS_Store
 
 # directories
+__pycache__/
 lib/
 include/
 bin/
