@@ -2,6 +2,7 @@
 */pip-selfcheck.json
 */.Python
 */.DS_Store
+db.sqlite3
 
 # directories
 __pycache__/
