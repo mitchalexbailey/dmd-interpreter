@@ -790,8 +790,8 @@ def results(request):
 		if len(intron_list[1])>1:
 			search_nums += str(intron_list[1][1]) + " "
 
-		# Example: https://databases.lovd.nl/shared/variants/DMD/unique?search_var_status=%3D%22Marked%22%7C%3D%22Public%22#object_id=VariantOnTranscriptUnique%2CVariantOnGenome&id=DMD&search_transcriptid=00000024
-		leiden_base_link ="https://databases.lovd.nl/shared/variants/DMD/unique?search_var_status=%3D%22Marked%22%7C%3D%22Public%22#object_id=VariantOnTranscriptUnique%2CVariantOnGenome&id=DMD&search_transcriptid=00000024"
+		# Example: https://databases.lovd.nl/shared/variants/DMD/unique?search_VariantOnTranscript/Exon=6&search_VariantOnTranscript/DNA=358%20530%20del
+		leiden_base_link ="https://databases.lovd.nl/shared/variants/DMD/unique?"
 		leiden_exon = f"search_VariantOnTranscript/Exon={' '.join([str(x) for x in exon_numbers])}"
 		temp_nums = re.findall('\d+', standard_hgvs.split('c.')[-1])
 		leiden_positions_type = f"search_VariantOnTranscript/DNA={'%20'.join([str(x) for x in temp_nums])}"
