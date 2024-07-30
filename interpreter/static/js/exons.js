@@ -1,7 +1,10 @@
 $(window).bind("pageshow", function() {
     $(".userAnswer").removeAttr("disabled");
     document.getElementById('userAnswer').value = "";
-    $("#togglertext").click();
+    // This closes the text input on the top of the page, without any way of opening it back up.
+    // It also means users can not see the text resulting from their selections in the exon deletion selector.
+    // Therefore, disabling this click for now.
+    // $("#togglertext").click();
 });
 
 var exons = [];
