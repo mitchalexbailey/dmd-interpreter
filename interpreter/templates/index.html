@@ -6,10 +6,10 @@
 
 
 {% if success == False %}
-<h3> 
+<h3>
   <br>
   <div class = 'well' style='text-align:center'>
-    <c style='color:red'>No variant type, or position detected in your input. Please retry.<br>If problem persists, please refer to input examples or <a href='mailto:mitchalexbailey@gmail.com?Subject=DMD%20Mutation%20Explorer'> contact us </a>with a description of the issue.</c><br>
+    <c style='color:red'>No variant type, or position detected in your input. Please retry.<br>If problem persists, please refer to input examples or <a href='mailto:dove.dmd.interpreter@gmail.com?Subject=DOVE%20Web%20App'>contact us</a> with a description of the issue.</c><br>
   </div>
 </h3>
 {% endif %}
@@ -19,13 +19,13 @@
 </div>
 {% endif %}
 
-<h3> 
+<h3>
 	<br>Input specific <i>DMD</i> gene variants to receive analysis of variant type, length, reading frame alterations, potential effects on splicing, and exon skipping eligibility.
 </h3>
 
 <br>
 <form action="{% url 'interpreter:results' %}" method = "post">
-{% csrf_token %}	
+{% csrf_token %}
 
 <style>
   table.equalDivide tr td {width:25%;}
@@ -43,7 +43,7 @@
     <i class="icon-folder-close"></i>
     <h3><span class="glyphicon glyphicon-text-size"></span>&emsp;Text input</h3>
   </a>
-  
+
   <div id="inp" class="collapse in">
     <h3>Input should include a reference to: </h3>
     <ol>
@@ -51,7 +51,7 @@
       <li>The type of variant.</li>
       <!-- <i>If you are uncertain how to input the variant, enter the numbers in ascending order (separated by a space), then any additional information (ex. A>T, del, dup, delins, exon)</i> -->
     </ol>
-    
+
     <div class='container-fluid' style='text-align: center;'>
       <a id="toggler" data-toggle="collapse" class="active" data-target="#examples">
         <i class="icon-folder-open"></i>
@@ -71,7 +71,7 @@
     </div>
 
 <br>
-    <input class='userAnswer' type = "text" id='userAnswer' name = "mutation" style='height:70px;width:100%;font-size:24pt;'/> 
+    <input class='userAnswer' type = "text" id='userAnswer' name = "mutation" style='height:70px;width:100%;font-size:24pt;'/>
   </div>
 </div>
 

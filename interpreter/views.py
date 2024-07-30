@@ -28,7 +28,7 @@ def results(request):
 		mut = request.POST.get('mutation', None)
 
 	ucsc_info = [12, 'NM_004006', 'chrX', '-', 31137344, 33229673, 31140035, 33229429, 79, '31137344,31144758,31152218,31164407,31165391,31187559,31190464,31191655,31196048,31196785,31198486,31200854,31222077,31224698,31227614,31241163,31279071,31341714,31366672,31462597,31496222,31497099,31514904,31525397,31645789,31676106,31697491,31747747,31792076,31838091,31854834,31893307,31947712,31950196,31986455,32235032,32305645,32328198,32360216,32361250,32364059,32366522,32380904,32382698,32383136,32398626,32404426,32407617,32408187,32429868,32456357,32459296,32466572,32472778,32481555,32482702,32486614,32490280,32503035,32509393,32519871,32536124,32563275,32583818,32591646,32591861,32613873,32632419,32662248,32663080,32715986,32717228,32827609,32834584,32841411,32862899,32867844,33038255,33229398,', '31140047,31144790,31152311,31164531,31165635,31187718,31190530,31191721,31196087,31196922,31198598,31201021,31222235,31224784,31227816,31241238,31279133,31341775,31366751,31462744,31496491,31497220,31515061,31525570,31645979,31676261,31697703,31747865,31792309,31838200,31854939,31893490,31947862,31950344,31986631,32235180,32305818,32328393,32360399,32361403,32364197,32366645,32381075,32382827,32383316,32398797,32404582,32407791,32408298,32430030,32456507,32459431,32466755,32472949,32481711,32482816,32486827,32490426,32503216,32509635,32519959,32536248,32563451,32583998,32591754,32591963,32613993,32632570,32662430,32663269,32716115,32717410,32827728,32834757,32841504,32862977,32867937,33038317,33229673,', 0, 'DMD', 'cmpl', 'cmpl', '0,1,1,0,2,2,2,2,2,0,2,0,1,2,1,1,2,1,0,0,1,0,2,0,2,0,1,0,1,0,0,0,0,2,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,2,0,0,0,0,0,2,0,0,0,1,2,0,0,0,0,1,0,']
-	
+
 
 	#Read in static reference files
 
@@ -204,8 +204,8 @@ def results(request):
 		return render(request, 'index.html',{'success':False})
 	else:
 		pass
-	
-	
+
+
 	#Check if numbers extend past the length of the coding region.
 	for num in num_list:
 		if int(num) > 3685*3 and not ex_input: #AA length *3
@@ -214,11 +214,11 @@ def results(request):
 			past_max = True
 		else:
 			pass
-	
+
 
 	#If there is only one cDNA position and the intron list is not empty, mutation type is intron_only OR if the num_list is empty
 	intron_only = intron_count(intron_list, num_list)
-	
+
 
 	#Check to see if the user meant exon if the numbers entered were below 80 (the number of exons in DMD = 79).
 	if (mutype == "Deletion" or mutype == "Duplication") and "c." not in mut and len(num_list) > 0 and not ex_input and "Nucleotide" not in mut:
@@ -227,7 +227,7 @@ def results(request):
 				num_list = re.findall("\d+", mut)
 				g.write("""<div class='container' style='text-align:center'><h1>You entered: '<c style='color:red'>""")
 				g.write(mut)
-				g.write("""</c>'</h1><br><h2>Did you mean...<br><br>'<i>""")		
+				g.write("""</c>'</h1><br><h2>Did you mean...<br><br>'<i>""")
 				temp = ''
 				temp += mutype
 				if len(num_list) == 1:
@@ -254,14 +254,14 @@ def results(request):
 		with open(os.path.join(interpreter_dir, 'templates/triage.html'), 'w') as g:
 			g.write("""<div class='container' style='text-align:center'><h1>You entered: '<c style='color:red'>""")
 			g.write(mut)
-			g.write("""</c>'<br><br>Did you mean...<br>""")	
+			g.write("""</c>'<br><br>Did you mean...<br>""")
 
 	#Numbers past the length of the cDNA:
 			if past_max:
 				g.write(("""</h1><h2>A smaller number?</h2><br>You entered: <c style='color:red'>%s""" % str(max(num_list))) + """</c><br>Which is larger than the length of the <i>DMD, Dp427m</i> coding sequence (11055 nt)<br><br>Please enter your revised mutation below, or <a href="{% url 'interpreter:index' %}">return to the previous page</a> to try the "Exon deletion selector" feature.<br><br><form action="{% url 'interpreter:results' %}" method="post"> {% csrf_token %}<input type = "text" id='userAnswer' name = "mutation" id='mutation' style='height:70px;width:100%;font-size:24pt;'/><br><br><button type = "submit" style = 'height:70px;width:150px;font-size:24px;align:center' class = 'btn btn-lg btn-primary'>Interpret</button></form></div></body>""")
 
 	#Numbers, but no key words:
-			if mutype == "Invalid mutation" and not past_max and len(num_list)>0:# and not ex_input:   
+			if mutype == "Invalid mutation" and not past_max and len(num_list)>0:# and not ex_input:
 				tridel = "Deletion of Nucleotide(s) "
 				tridelex = "Deletion of Exon(s) "
 				tridup = "Duplication of Nucleotide(s) "
@@ -312,30 +312,30 @@ def results(request):
 					g.write("</button><button name='mutation' id='mutation' value='")
 					g.write(tridupex)
 					g.write("' class='btn-info btn-lg'>")
-					g.write(tridupex)		
-				
+					g.write(tridupex)
+
 				g.write("</div><div class='row'>")
 
 				g.write("</button><button name='mutation' id='mutation' value='")
 				g.write(tripoint)
 				g.write("' class='btn-primary btn-lg'>")
-				g.write(tripoint)	
+				g.write(tripoint)
 
 				g.write("</div><div class='row'>")
 
 				g.write("</button><button name='mutation' id='mutation' value='")
 				g.write(triins)
 				g.write("' class='btn-primary btn-lg'>")
-				g.write(triins)	
+				g.write(triins)
 
 				g.write("</div><div class='row'>")
 
 				g.write("</button><button name='mutation' id='mutation' value='")
 				g.write(tridelins)
 				g.write("' class='btn-primary btn-lg'>")
-				g.write(tridelins)	
+				g.write(tridelins)
 
-				g.write("""</div></form></div>""")		
+				g.write("""</div></form></div>""")
 
 		g.closed
 		return render(request, 'index.html', {'triage':True})
@@ -362,17 +362,17 @@ def results(request):
 		return render(request, 'index.html', {'triage':True})
 
 	#No input errors.
-	if not past_max and mutype != "Invalid mutation": # and len(num_list) != 0:       
+	if not past_max and mutype != "Invalid mutation": # and len(num_list) != 0:
 		if intron_only:
 			missense = False
 			nonsense = False
 			silent = True
 			frame_shift = False
 			length_mutation, pm_change, pm_pre = get_length(mut, mutype, num_list, mut, ex_input, reference_cdna)
-			positions_in_genomic1, positions_in_genomic2, positions_in_genomic3 = cdna2gen(num_list, exon_positions, genomic_positions1, genomic_positions2, genomic_positions3, intron_list)				
+			positions_in_genomic1, positions_in_genomic2, positions_in_genomic3 = cdna2gen(num_list, exon_positions, genomic_positions1, genomic_positions2, genomic_positions3, intron_list)
 			ghgvs, ghgvs19 = HGVS(positions_in_genomic2, positions_in_genomic3, mutype, search, length_mutation, ex_input, [[],[]], pm_change, pm_pre, True)
 
-			
+
 			if mutype == "Point mutation" and len(pm_pre) == 0:
 				if mutype == "Point mutation" or mutype == "Deletion/Insertion":
 					if len(num_list) == 1:
@@ -434,7 +434,7 @@ def results(request):
 			frame_shift = False
 			if len(num_list) != 0:
 				length_mutation, pm_change, pm_pre = get_length(mut, mutype, num_list, mut, ex_input, reference_cdna)
-				positions_in_genomic1, positions_in_genomic2, positions_in_genomic3 = cdna2gen(num_list, exon_positions, genomic_positions1, genomic_positions2, genomic_positions3, intron_list)				
+				positions_in_genomic1, positions_in_genomic2, positions_in_genomic3 = cdna2gen(num_list, exon_positions, genomic_positions1, genomic_positions2, genomic_positions3, intron_list)
 				ghgvs, ghgvs19 = HGVS(positions_in_genomic2, positions_in_genomic3, mutype, search, length_mutation, ex_input, [[],[]], pm_change, pm_pre, True)
 				if len(pm_pre) == 0:
 					if mutype == "Point mutation" or "Insertion" in mutype:
@@ -482,7 +482,7 @@ def results(request):
 				standard_hgvs, catcher = HGVS(num_list, num_list, mutype, search, length_mutation, ex_input, intron_list, pm_change, pm_pre)
 				mv_results = myVariantSearch(standard_hgvs)
 				CV = ClinVar(mv_results, standard_hgvs)
-				aa_ref = translate(reference_cdna[244:])	
+				aa_ref = translate(reference_cdna[244:])
 				nsfp_results, path_pred = gen_point(positions_in_genomic1, complement(pm_change), intron_only, length_mutation, NSFP)
 
 				if mutype == "Deletion" and len(num_list) != 0:
@@ -518,7 +518,7 @@ def results(request):
 					aa_change, align, PTC = easy_align(aa_ref, aa_seq, mutype, frame_shift)
 					exon_numbers, part = exons(num_list, exon_positions, ex_input, mut, part)
 				if len(num_list) != 0:
-					ese, ess, ese_finder, type_ese, type_ess = ese_find(cDNA, reference_cdna, ese_sites, ess_sites, positions_in_genomic1, genomic_dna, length_mutation, mut_genomic_dna)                                                        
+					ese, ess, ese_finder, type_ese, type_ess = ese_find(cDNA, reference_cdna, ese_sites, ess_sites, positions_in_genomic1, genomic_dna, length_mutation, mut_genomic_dna)
 
 				if mutype != "Duplication":
 					long_aa_change = aa_longform(aa_change, mutype, frame_shift, num_list, length_mutation, aa_ref)
@@ -552,7 +552,7 @@ def results(request):
 				if mutype == "Insertion" and length_mutation == 1:
 					mutype = "Point mutation (insertion)"
 				ds = domain(num_list, domains)
-                       
+
 				if "Deletion of exon" in mut:
 					if len(exon_ints) == 1:
 						if mut[len(mut)-2] == ",":
@@ -577,7 +577,7 @@ def results(request):
 					consequence_statement = "Insertion without frameshift. New amino acids incorporated, with remaining sequence intact."
 				if mutype == "Deletion" and not frame_shift:
 					temp = 'Deletion without frame shift: '
-					temp += aa_longform("", mutype, frame_shift, num_list, length_mutation, aa_ref)    
+					temp += aa_longform("", mutype, frame_shift, num_list, length_mutation, aa_ref)
 					i=0
 					if PTC != '':
 						temp2 = "\n<br><c style='color:orange'>(Change at boundary: ", PTC, ")</c>"
@@ -679,10 +679,10 @@ def results(request):
 				splice_message2 = "<c style='color:orange'><b>Predictions are not made for large mutations</b></c>"
 
 		# ESEFinder predictions are based on changes in consensus scores after mutation according to matrices at the Cold Spring Harbor Laboratory: <a href='http://rulai.cshl.edu/cgi-bin/tools/ESE3/esefinder.cgi?process=matrices'>http://rulai.cshl.edu/cgi-bin/tools/ESE3/esefinder.cgi?process=matrices</a> <br>Specific binding sites predicted to be effected are listed in brackets following ESEFinder.<br><br>
-		# Questions/Issues: <a href='mailto:mitchalexbailey@gmail.com?Subject=DMD%20Mutation%20Explorer'> mitchalexbailey@gmail.com </a><br>
+		# Questions/Issues: <a href='mailto:dove.dmd.interpreter@gmail.com?Subject=DOVE%20Web%20App'>Contact Us</a>.<br>
 
 
-		##EXON SKIPPING		
+		##EXON SKIPPING
 			if len(posskip)>0 and frame_shift:
 				if part == True:
 					posskip = []
@@ -698,13 +698,13 @@ def results(request):
 				posskip += ["This variant type (missense; nonsense; small insertion, deletion, indel; or splice-affecting) has not been clinically tested in <i>DMD</i> with exon skip therapy."]
 			elif len(posskip) == 0 and length_mutation >= 32:
 				posskip += ["There are no theoretical exon skips predicted to apply to this mutation."]
-			
+
 			if nonsense and not frame_shift:
 				readthrough_elig = "<c style='color:green'><b>Eligible</b></c>"
 			else:
 				pass
-			
-		
+
+
 		else:
 			return render(request, 'index.html',{'success':False})
 
@@ -750,11 +750,11 @@ def results(request):
 				temp_cdna = temp_refcdna
 				refcdna_for_print = ''.join(temp_refcdna)
 			elif mutype == "Deletion":
-				temp_refcdna = "<em class='gray'>",reference_cdna[0:min(num_list)+244]+"</em><em class='green'>"+reference_cdna[min(num_list)+244:min(num_list)+244+length_mutation]+"</em><em class='gray'>"+reference_cdna[min(num_list)+244+length_mutation:len(reference_cdna)]+"</em>" 
+				temp_refcdna = "<em class='gray'>",reference_cdna[0:min(num_list)+244]+"</em><em class='green'>"+reference_cdna[min(num_list)+244:min(num_list)+244+length_mutation]+"</em><em class='gray'>"+reference_cdna[min(num_list)+244+length_mutation:len(reference_cdna)]+"</em>"
 			elif mutype == "Duplication":
-				temp_refcdna = "<em class='gray'>",reference_cdna[0:min(num_list)+244]+"</em><em class='green'>"+reference_cdna[min(num_list)+244:min(num_list)+244+length_mutation]+"</em><em class='gray'>"+reference_cdna[min(num_list)+244+length_mutation:len(reference_cdna)]+"</em>" 
+				temp_refcdna = "<em class='gray'>",reference_cdna[0:min(num_list)+244]+"</em><em class='green'>"+reference_cdna[min(num_list)+244:min(num_list)+244+length_mutation]+"</em><em class='gray'>"+reference_cdna[min(num_list)+244+length_mutation:len(reference_cdna)]+"</em>"
 			else:
-				temp_refcdna = "<em class='gray'>",reference_cdna[0:min(num_list)+243],"</em><em class='green'>",reference_cdna[min(num_list)+243:min(num_list)+243+length_mutation],"</em><em class='gray'>",reference_cdna[min(num_list)+243+length_mutation:len(reference_cdna)],"</em>" 
+				temp_refcdna = "<em class='gray'>",reference_cdna[0:min(num_list)+243],"</em><em class='green'>",reference_cdna[min(num_list)+243:min(num_list)+243+length_mutation],"</em><em class='gray'>",reference_cdna[min(num_list)+243+length_mutation:len(reference_cdna)],"</em>"
 			refcdna_for_print = ''.join(temp_refcdna)
 			try:
 				refcdna_print_preview = refcdna_for_print[min(num_list)+17+243-100:min(num_list)+1+17+243+23+22+(length_mutation*2)+100]
@@ -765,7 +765,7 @@ def results(request):
 		if mutype == "Deletion/Insertion" and not intron_only:
 			try:
 				refcdna_print_preview = refcdna_for_print[min(num_list)+17+243-100:min(num_list)+1+17+243+23+22+max(length_mutation[0],length_mutation[1])+100]
-				cdna_print_preview = cdna_for_print[min(num_list)+17+243-100:min(num_list)+1+17+243+22+21+max(length_mutation[0],length_mutation[1])+100]    
+				cdna_print_preview = cdna_for_print[min(num_list)+17+243-100:min(num_list)+1+17+243+22+21+max(length_mutation[0],length_mutation[1])+100]
 			except:
 				refcdna_print_preview = refcdna_for_print[min(num_list)+17+243:min(num_list)+1+17+243+23+22+max(length_mutation[0],length_mutation[1])]
 				cdna_print_preview = cdna_for_print[min(num_list)+17+243:min(num_list)+1+17+243+22+21+max(length_mutation[0],length_mutation[1])]
