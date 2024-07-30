@@ -1,7 +1,6 @@
 $(window).bind("pageshow", function() {
 	$(".userAnswer").removeAttr("disabled");
   	document.getElementById('userAnswer').value = "";
-    document.getElementById('userAnswer2').value = "";
   	$("#togglertext").click();
 	});
 
