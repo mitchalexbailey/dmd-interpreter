@@ -418,7 +418,7 @@ def results(request):
 			if length_mutation < 30 or mutype=="Deletion/Insertion":
 			    insilico_message = "<i>Please check the 'In Silico Predictions' for more details</i>"
 			if length_mutation >= 30 and mutype!="Deletion/Insertion":
-			    insilico_message = "<i>In Silico predictions are not made for large mutations.<br><br>Please see </i><b>'Predicted consequence'</b><i> for reading frame changes, and </i><b>'The Reading-frame Rule'</b><i> in resources for more information</i>"
+			    insilico_message = "<i>In Silico predictions are not made for this mutation type.<br><br>Please see </i><b>'Predicted consequence'</b><i> for reading frame changes, and </i><b>'The Reading-frame Rule'</b><i> in resources for more information</i>"
 			if 'Pathogenic' in CV:
 			    cv += "<c style='color:red'>"
 			if 'Benign' in CV:
@@ -607,9 +607,15 @@ def results(request):
 						nsfp_message += "<c style='color:red'><b>"
 					nsfp_message += str(path_pred)
 					nsfp_message += "/8 </c></b><b> prediction algorithms indicate negative impact on protein function.</b><br>"
-				if length_mutation < 30 or mutype=="Deletion/Insertion":
+				
+				if type(length_mutation)==list:
+					test_length = 1000 # max([x for x in length_mutation if type(x)==int])
+				else:
+					test_length = length_mutation
+
+				if test_length < 30 or mutype=="Deletion/Insertion":
 					insilico_message = "<i>Please check the 'In Silico Predictions' for more details</i>"
-				if length_mutation >= 30 and mutype!="Deletion/Insertion":
+				if test_length >= 30 and mutype!="Deletion/Insertion":
 					insilico_message = "<i>In Silico predictions are not made for this mutation type.<br><br>Please see </i><b>'Mutation type'</b> and <b>'Predicted consequence'</b><i> for reading frame changes, and </i><b>'Reading-frame rule'</b><i> in resources for more information</i>"
 				if 'Pathogenic' in CV:
 					cv += "<c style='color:red'>"
@@ -618,7 +624,7 @@ def results(request):
 				cv += CV
 
 		            #Splicing
-			if length_mutation < 30 or mutype == "Deletion/Insertion":
+			if test_length < 30:
 				if missense:
 					if path_pred > 2 and path_pred < 6:
 						nsfp_score += "<c style='color:orange'>"
@@ -674,9 +680,9 @@ def results(request):
 						splice_result += [temp]
 						i += 7
 
-			if length_mutation >= 30 and mutype != "Deletion/Insertion":
+			if test_length >= 30 or mutype == "Deletion/Insertion":
 				large_deletion = True
-				splice_message2 = "<c style='color:orange'><b>Predictions are not made for large mutations</b></c>"
+				splice_message2 = "<c style='color:orange'><b>Predictions are not made for this type of mutation</b></c>"
 
 		# ESEFinder predictions are based on changes in consensus scores after mutation according to matrices at the Cold Spring Harbor Laboratory: <a href='http://rulai.cshl.edu/cgi-bin/tools/ESE3/esefinder.cgi?process=matrices'>http://rulai.cshl.edu/cgi-bin/tools/ESE3/esefinder.cgi?process=matrices</a> <br>Specific binding sites predicted to be effected are listed in brackets following ESEFinder.<br><br>
 		# Questions/Issues: <a href='mailto:dove.dmd.interpreter@gmail.com?Subject=DOVE%20Web%20App'>Contact Us</a>.<br>
