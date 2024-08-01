@@ -475,10 +475,16 @@ def splice_check(gen_pos, length_mutation, mut_genomic_dna, genomic_dna):
 	affected = []
 	cryptic = []
 	side = "Neither"
-	if length_mutation > 8:
-		affected += ["Splice predictions are not made for deletions of this size"]
+	if type(length_mutation)==list:
+		affected += ["Splice predictions are not made for this mutation type"]
 		return affected
-	if length_mutation <= 8:
+	else:
+		test_length = length_mutation
+
+	if test_length > 8:
+			affected += ["Splice predictions are not made for this mutation type"]
+			return affected
+	else:
 		donor_mfrag = mut_genomic_dna[min(gen_pos)-8:min(gen_pos)+9]
 		acceptor_mfrag = mut_genomic_dna[min(gen_pos)-22:min(gen_pos)+23]
 		donor_frag = genomic_dna[min(gen_pos)-8:min(gen_pos)+9]
@@ -602,8 +608,9 @@ def gen_point(genomic_position, pm, intron_only, length_mutation, NSFP):
 	hit = []
 	result = []
 	empty = ["0","Not missense","Not missense","Not missense","Not missense","Not missense","Not missense","Not missense","Not missense"], 0
-	if intron_only or length_mutation > 1:
-		return empty
+	if type(length_mutation) != list:
+		if intron_only or length_mutation > 1:
+			return empty
 	gen_position = genomic_position[0]
 	for index, line in enumerate(NSFP):
 		if int(line[1]) == int(gen_position) and line[3] == pm:
@@ -1022,7 +1029,7 @@ def possible_skips(ex_ints, length, refcdna, frame_shift, exon_positions, mutype
 			if end%3 == 1 or end%3 == 0:
 				aa_skipgap = aa_skip[0:floor(end/3)] + filler + aa_skip[floor(end/3):]
 			if end%3 == 2:
-				aa_skipgap = aa_skip[0:floor(end/3)+1] + filler + aa_skip[(end/3)+1:]					
+				aa_skipgap = aa_skip[0:floor(end/3)+1] + filler + aa_skip[floor(end/3)+1:]					
 			aa_skipgap = ''.join(aa_skipgap)
 			delta, align, PTC = easy_align(aa_ref, aa_skipgap, mutype, frame_shift)
 			for index, item in enumerate(delta):
@@ -1302,6 +1309,8 @@ def ese_find(cdna, refcdna, ese_list, ess_list, gen_pos, genomic_dna, length_mut
 	esef = False
 	ese_types = []
 	ess_types = []
+	if type(length_mutation) == list:
+		length_mutation = max([x for x in length_mutation if type(x)==int])
 	if length_mutation > 30:
 		return rese, ress, esef, ese_types, ess_types
 	mut_seg = mut_genomic_dna[mut_min:mut_max]
