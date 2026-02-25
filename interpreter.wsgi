@@ -1,1 +1,1 @@
-from interpreter_site.wsgi import application
+from app import application

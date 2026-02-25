@@ -1,3 +1,2 @@
-Django==3.2.9
-django-bootstrap3==15.0.0
+Flask==2.3.3
 myvariant==1.0.0

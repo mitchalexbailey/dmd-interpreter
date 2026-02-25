@@ -21,3 +21,5 @@ no number
 no mutation type
 random characters
 negative number
+genomic coordinates dup spanning gene (g.(?_2782275)_(155611794_?)dup)
+hgvs intronic range deletion (NM_004006.2:c.(7098+382_7099-106)_(7200+142_7201-72)del)

@@ -5,7 +5,7 @@
 ### Purpose
 The purpose of the _DMD_ Open-Access Variant Explorer (DOVE) is to streamline analysis of genetic variants affecting the Dp427m (`NM_004006.2`) transcript of the _DMD_ gene.
 
-DOVE uses Python and the Django web framework to integrate existing open-access tools to reduce the number of distinct searches needed to analyse a variant, and to expand analysis beyond variants already well described (i.e. novel variants).
+DOVE uses Python and the Flask web framework to integrate existing open-access tools to reduce the number of distinct searches needed to analyse a variant, and to expand analysis beyond variants already well described (i.e. novel variants).
 In addition to predicted consequences of genetic variants, the tool integrates theoretical eligibility for exon skipping or read-through therapies.
 
 ### Set up
@@ -27,10 +27,7 @@ In addition to predicted consequences of genetic variants, the tool integrates t
 
 - To run locally (suggestions/contributions are welcomed!):
 
-  `./manage.py runserver 0.0.0.0:8000`
-
-  Note: For static files to be served locally, `DEBUG` will need to be `TRUE` in `settings.py`.
-  That does not apply to the Apache installation; see below.
+  `python app.py`
 
 - DOVE can now be tested through your browser. To deactivate:
 
@@ -53,18 +50,18 @@ In addition to predicted consequences of genetic variants, the tool integrates t
       Require all granted
   </Directory>
 
-  <Directory /var/www/dmd-interpreter/interpreter_site>
-      <Files wsgi.py>
+  <Directory /var/www/dmd-interpreter>
+      <Files interpreter.wsgi>
           Require all granted
       </Files>
   </Directory>
 
   WSGIDaemonProcess DOVE python-home=/var/www/dmd-interpreter/DOVE_env home=/var/www/dmd-interpreter
   WSGIProcessGroup DOVE
-  WSGIScriptAlias /DOVE /var/www/dmd-interpreter/interpreter_site/wsgi.py
+  WSGIScriptAlias /DOVE /var/www/dmd-interpreter/interpreter.wsgi
   ```
 
-- Make sure Apache has rights to write to the temp file (`interpreter/temp.txt`) and the triage html file (`interpreter/templates/triage.html`).
+- Make sure Apache has read permissions for the application files and static assets.
 
 - Restart Apache to complete the process.
 

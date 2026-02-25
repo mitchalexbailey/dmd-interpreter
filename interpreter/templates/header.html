@@ -1,14 +1,13 @@
-{% load static %}
 <!DOCTYPE html>
 <head>
   <title>DOVE</title>
-  <link rel='stylesheet' type = 'text/css' href='{% static 'css/bootstrap.css' %}'/>
-  <link rel='stylesheet' type = 'text/css' href='{% static 'css/custom.css' %}'/>
+  <link rel='stylesheet' type = 'text/css' href='{{ url_for('static', filename='css/bootstrap.css') }}'/>
+  <link rel='stylesheet' type = 'text/css' href='{{ url_for('static', filename='css/custom.css') }}'/>
   <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
 
   <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-  <script src="{% static 'js/bootstrap.min.js' %}"></script>
-  <script src="{% static 'js/exons.js' %}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/exons.js') }}"></script>
 </head>
 
 <div class='navbar navbar-default navbar-fixed-top'>
@@ -20,13 +19,13 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="{% url 'interpreter:index' %}"><span><img class="hidden-xs" style="height:140%" src="{% static 'images/vertical_clip.png' %}" alt="DNA Logo"/></span><h2 class="navbar-text hidden-xs"><b>DOVE</b><span class="hidden-sm">:<i>DMD</i> Open-access Variant Explorer</span></h2><p class="navbar-text visible-xs">&nbsp;&nbsp;&nbsp;<b>DOVE</b>: <i>DMD</i> Open-access Variant Explorer</p></a>
+      <a class="navbar-brand" href="{{ url_for('index') }}"><span><img class="hidden-xs" style="height:140%" src="{{ url_for('static', filename='images/vertical_clip.png') }}" alt="DNA Logo"/></span><h2 class="navbar-text hidden-xs"><b>DOVE</b><span class="hidden-sm">:<i>DMD</i> Open-access Variant Explorer</span></h2><p class="navbar-text visible-xs">&nbsp;&nbsp;&nbsp;<b>DOVE</b>: <i>DMD</i> Open-access Variant Explorer</p></a>
     </div>
 
     <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
           <li>
-            <a href="{% url 'interpreter:index' %}"><h4 style="color:black">Home</h4></a>
+            <a href="{{ url_for('index') }}"><h4 style="color:black">Home</h4></a>
           </li> 
           <!-- <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#"><h4 style="color:black">Resources</h4></a>
@@ -57,9 +56,8 @@
               <li class="dropdown-header">Enter a variant:
               </li>  
               <li>
-                <form action="{% url 'interpreter:results' %}" method = "post">
-                {% csrf_token %}
-                <input class="userAnswer" type = "text" id='userAnswer' name = "mutation" style='height:70px;width:100%;font-size:24pt;'/>
+                <form action="{{ url_for('results') }}" method = "post">
+                                <input class="userAnswer" type = "text" id='userAnswer' name = "mutation" style='height:70px;width:100%;font-size:24pt;'/>
               </li>
               <li style='margin-top:20px;margin-bottom:20px'>
                 <button type = "submit" style = 'height:70px;width:150px;font-size:24px;align:center' class = 'btn btn-lg btn-primary'>Interpret</button><br>

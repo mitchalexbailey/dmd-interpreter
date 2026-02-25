@@ -1,4 +1,3 @@
-{% load static %}
 {% include 'header.html' %}
 
 <div class='container'><br>
@@ -25,8 +24,8 @@
 						<table class="table table-bordered">
 							<tr>
 								<td>HGVS</td>
-								<td><b id="displayedHgvs">NM_004006.2:{{ hgvs }}</b>
-									&nbsp;&nbsp;<a href="https://mutalyzer.nl/normalizer/NM_004006.2:{{hgvs|urlencode}}" target="_blank">(Click here to verify variant at Mutalyzer)</a></td>
+								<td><b id="displayedHgvs">{{ transcript }}:{{ hgvs }}</b>
+									&nbsp;&nbsp;<a href="https://mutalyzer.nl/normalizer/{{ transcript }}:{{hgvs|urlencode}}" target="_blank">(Click here to verify variant at Mutalyzer)</a></td>
 							</tr>
 							<tr>
 								<td>Genomic location (GRCh38)</td>
@@ -44,9 +43,9 @@
 								<td>Exon number(s)</td>
 								<td><b>
 								{% if exons|length > 1 %}
-								{{ exons.0 }}-{{ exons.1 }}
+								{{ exons[0] }}-{{ exons[1] }}
 								{% else %}
-								{{ exons.0 }}
+								{{ exons[0] }}
 								{% endif %}
 								</b></td>
 							</tr>
@@ -93,7 +92,7 @@
 					<h3>Dystrophin Diagram<span class="caret"></span></h3>
 					</a>
 					<div id='loc' class='collapse'>
-						<img src='{% static 'images/domains4.gif' %}' class='img-responsive' style='width:100%;' alt="Dystrophin/DMD Map"/>
+						<img src='{{ url_for('static', filename='images/domains4.gif') }}' class='img-responsive' style='width:100%;' alt="Dystrophin/DMD Map"/>
 					</div>
 					<br><br>
 				</div>
@@ -262,7 +261,7 @@
 						<a id="togglermut" data-toggle="collapse" class="collapse in" data-target="#mut">
 						<i class="icon-folder-open"></i>
 						<i class="icon-folder-close"></i>
-						<h2>Reference Sequence (NM_004006.2)</h2>Click for full sequence</a><em class='gray'>{{ refcdna_print_preview|safe }}</em>
+						<h2>Reference Sequence ({{ transcript }})</h2>Click for full sequence</a><em class='gray'>{{ refcdna_print_preview|safe }}</em>
 						<div id='mut' class='collapse'>
 							<h3>Full Sequence:</h3><p>(double-click to copy/paste)</p>{{ refcdna_for_print|safe }}
 						</div>
@@ -357,7 +356,7 @@
 									<li>Landrum MJ, Lee JM, Riley GR, Jang W, Rubinstein WS, Church DM, Maglott DR. ClinVar: public archive of relationships among sequence variation and human phenotype. Nucleic Acids Res. 2014 Jan 1;42(1):D980-5. doi: 10.1093/nar/gkt1113. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/24234437" target="_blank">24234437</a>.</li><br>
 									<li>Liu X, Wu C, Li C and Boerwinkle E. 2015. dbNSFP v3.0: A One-Stop Database of Functional Predictions and Annotations for Human Non-synonymous and Splice Site SNVs. Human Mutation. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/26555599" target="_blank">26555599</a>.</li><br>
 									<li>White SJ, den Dunnen JT (2006). Copy number variation in the genome; the human DMD gene as an example. Cytogenet.Genome Res. 115: 240-246. PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/17124406" target="_blank">17124406</a>.</li><br>
-									<li>Homo sapiens dystrophin (DMD), transcript variant Dp427m, mRNA. RefSeq Accession: <a href="http://www.ncbi.nlm.nih.gov/nuccore/238018044" target="_blank">NM_004006.2</a>.</li><br>
+									<li>Homo sapiens dystrophin (DMD), transcript variant Dp427m, mRNA. RefSeq Accession: <a href="https://www.ncbi.nlm.nih.gov/nuccore/{{ transcript }}" target="_blank">{{ transcript }}</a>.</li><br>
 									<li>Homo sapiens dystrophin (DMD), RefSeqGene (LRG_199) on chromosome X. RefSeq AFccession: <a href="http://www.ncbi.nlm.nih.gov/nuccore/256355061" target="_blank">NG_012232.1</a>.</li><br>
 								</div>
 							</ul>

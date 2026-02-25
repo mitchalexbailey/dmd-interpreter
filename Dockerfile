@@ -3,7 +3,7 @@ FROM continuumio/miniconda
 # We need gcc and build tools to complie uwsgi
 RUN apt-get install -y linux-headers-amd64 build-essential libpcre3 libpcre3-dev
 
-# We need pip to install uwsgi, django, etc. (sqlite is for the database)
+# We need pip to install uwsgi and dependencies (sqlite is for the database)
 RUN conda install -y pip
 RUN conda install -y sqlite
 
@@ -23,7 +23,6 @@ RUN echo this is a hack
 # Add this source directory to the image
 ADD . $INTERPRETER_DIR
 RUN pip install -r $INTERPRETER_DIR/requirements.txt
-RUN cd $INTERPRETER_DIR ; python manage.py collectstatic --no-input
 
 RUN useradd --no-create-home --home-dir $INTERPRETER_DIR --uid $INTERPRETER_UID --user-group $INTERPRETER_USER
 
